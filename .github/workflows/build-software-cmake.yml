@@ -18,25 +18,24 @@ jobs:
 
       matrix:
         os:
-          - ubuntu-latest
-          - windows-latest
-        build_type: [Release]
-        c_compiler: [gcc, clang]
+          - ubuntu-latest:
+            binary: digilivolo
+          - windows-latest:
+            binary: digilivolo.exe
+        build_type: [ Release ]
+        c_compiler: [ gcc, clang ]
         include:
           - os: windows-latest
             c_compiler: gcc
             binary_target: digilivolo-win-x86_64.exe
           - os: windows-latest
             c_compiler: clang
-            # binary_orig: digilivolo.exe
             binary_target: digilivolo-win-clang-x86_64.exe
           - os: ubuntu-latest
             c_compiler: gcc
-            # binary_orig: digilivolo
             binary_target: digilivolo-linux-x86_64
           - os: ubuntu-latest
             c_compiler: clang
-            # binary_orig: digilivolo
             binary_target: digilivolo-linux-clang-x86_64
 
     steps:
@@ -53,7 +52,7 @@ jobs:
       run: |
         ls -l
         pwd
-        echo "binary_orig: ${{ matrix.binary_orig }}"
+        echo "binary_orig: ${{ matrix.os.binary }}"
         echo "binary_target: ${{ matrix.binary_target }}"
 
     - name: Install Ninja
@@ -75,7 +74,7 @@ jobs:
     - name: Rename binary
       shell: bash
       run: |
-        mv software/build/${{ matrix.binary_orig }} software/build/${{ matrix.binary_target }}
+        mv software/build/${{ matrix.os.binary }} software/build/${{ matrix.binary_target }}
         ls -l software/build/${{ matrix.binary_target }}
         file software/build/${{ matrix.binary_target }}
 
