@@ -19,10 +19,12 @@ jobs:
       matrix:
         sys:
           - { os: ubuntu-latest,  shell: bash, c_compiler: gcc, binary_orig: digilivolo, binary_target: digilivolo-linux-x86_64 }
+          - { os: ubuntu-latest,  shell: bash, c_compiler: clang }
           - { os: windows-latest, shell: pwsh, c_compiler: gcc, binary_orig: digilivolo.exe, binary_target: digilivolo-win-x86_64.exe }
           - { os: windows-latest, shell: 'msys2 {0}', c_compiler: gcc, binary_orig: digilivolo.exe, binary_target: digilivolo-win-ucrt64.exe }
+          - { os: windows-latest,  shell: pwsh, c_compiler: clang }
         build_type: [Release]
-        c_compiler: [gcc, clang]
+#        c_compiler: [gcc, clang]
 #        include:
 #           - { os: ubuntu-latest,  shell: bash }
 #              c_compiler: gcc
