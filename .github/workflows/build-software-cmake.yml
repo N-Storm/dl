@@ -28,10 +28,16 @@ jobs:
             binary_target: digilivolo-win-x86_64.exe
           - os: windows-latest
             c_compiler: clang
+            binary_orig: digilivolo.exe
+            binary_target: digilivolo-win-clang-x86_64.exe
           - os: ubuntu-latest
             c_compiler: gcc
+            binary_orig: digilivolo
+            binary_target: digilivolo-linux-x86_64
           - os: ubuntu-latest
             c_compiler: clang
+            binary_orig: digilivolo
+            binary_target: digilivolo-linux-clang-x86_64
 
     steps:
     - uses: ConorMacBride/install-package@v1
@@ -73,19 +79,13 @@ jobs:
     - name: Build
       run: cmake --build ${{ steps.strings.outputs.build-output-dir }}
 
-    - name: Copy Linux binary
-      if: startsWith(matrix.os, 'ubuntu') && matrix.c_compiler == 'gcc'
+    - name: Rename binary
+      if: matrix.c_compiler == 'gcc'
       shell: bash
       run: |
-        cp ${{ steps.strings.outputs.build-output-dir }}/digilivolo ${{ steps.strings.outputs.build-output-dir }}/digilivolo-linux-x86_64
-        ls -l ${{ steps.strings.outputs.build-output-dir }}/digilivolo-linux-x86_64
-        file ${{ steps.strings.outputs.build-output-dir }}/digilivolo-linux-x86_64
-
-    - name: Copy Windows binary
-      if: startsWith(matrix.os, 'windows') && matrix.c_compiler == 'gcc'
-      run: |
-        copy ${{ steps.strings.outputs.build-output-dir }}\digilivolo.exe ${{ steps.strings.outputs.build-output-dir }}\${{ matrix.binary_target }}
-        dir ${{ steps.strings.outputs.build-output-dir }}\digilivolo-win-x86_64.exe
+        mv software/build/${{ matrix.binary_orig }} software/build/${{ matrix.binary_target }}
+        ls -l software/build/${{ matrix.binary_target }}
+        file software/build/${{ matrix.binary_target }}
 
     - name: Make and upload release
       uses: softprops/action-gh-release@v2
@@ -97,3 +97,4 @@ jobs:
         files: |
           ${{ steps.strings.outputs.build-output-dir }}/digilivolo-linux-x86_64
           ${{ steps.strings.outputs.build-output-dir }}/digilivolo-win-x86_64.exe
+          software/build/${{ matrix.binary_target }}
