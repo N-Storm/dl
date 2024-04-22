@@ -21,17 +21,21 @@ jobs:
         build_type: [Release]
         c_compiler: [gcc, clang]
         include:
-          - os: windows-latest
-            c_compiler: gcc
-            binary_orig: digilivolo.exe
-            binary_target: digilivolo-win-x86_64.exe
-          - os: windows-latest
-            c_compiler: clang
           - os: ubuntu-latest
             c_compiler: gcc
             binary_orig: digilivolo
             binary_target: digilivolo-linux-x86_64
           - os: ubuntu-latest
+            c_compiler: clang
+          - os: windows-latest
+            c_compiler: gcc
+            binary_orig: digilivolo.exe
+            binary_target: digilivolo-win-x86_64.exe
+          - os: windows-latest
+            c_compiler: gcc
+            binary_orig: digilivolo.exe
+            binary_target: digilivolo-win-ucrt64.exe
+          - os: windows-latest
             c_compiler: clang
 
     steps:
@@ -77,10 +81,9 @@ jobs:
 
     - name: Make and upload release
       uses: softprops/action-gh-release@v2
-      if: ${{ matrix.binary_target != '' }} && startsWith(github.ref, 'refs/tags/')
+      if: startsWith(github.ref, 'refs/tags/') && matrix.binary_target != ''
       with:
         fail_on_unmatched_files: false
         generate_release_notes: true        
         make_latest: true
-        files: |
-          software/build/${{ matrix.binary_target }}
+        files: software/build/${{ matrix.binary_target }}
