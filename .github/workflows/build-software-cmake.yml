@@ -32,7 +32,7 @@ jobs:
             binary_orig: digilivolo.exe
             binary_target: digilivolo-win-x86_64.exe
           - os: windows-latest
-            c_compiler: gcc
+            c_compiler: mingw-ucrt64
             binary_orig: digilivolo.exe
             binary_target: digilivolo-win-ucrt64.exe
           - os: windows-latest
