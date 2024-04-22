@@ -1,0 +1,72 @@
+name: Build DigiLivolo software for Windows with MSYS2 UCRT64
+
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - "v*.*.*"
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: ConorMacBride/install-package@v1
+      with:
+        apt: libudev-dev
+          
+    - uses: actions/checkout@v4
+      with:
+        submodules: 'recursive'
+
+    - name: 'Setup MSYS2'
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: UCRT64
+        update: true
+        install: >-
+          git
+          make
+          mingw-w64-ucrt-x86_64-gcc
+        pacboy: >-
+          toolchain:p
+          cmake:p
+          ninja:p
+
+    - name: Set reusable strings
+      # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
+      id: strings
+      shell: msys2 {0}
+      run: |
+        echo "proj-dir=${{ github.workspace }}/software" | sed -Ee 's/\\/\//g' -e 's/=([C-Z]):/=\/\1/' >> "$GITHUB_OUTPUT"
+
+    - name: Configure CMake
+      shell: msys2 {0}
+      run: >
+        cmake -B ${{ steps.strings.outputs.proj-dir }}/build
+        -DCMAKE_BUILD_TYPE=Release
+        -DUSE_SYSTEM_HIDAPI=false
+        -G Ninja
+        -S ${{ steps.strings.outputs.proj-dir }}
+
+    - name: Build
+      shell: msys2 {0}
+      run: cmake --build ${{ steps.strings.outputs.proj-dir }}/build
+
+    - name: Copy UCRT64 binary
+      shell: msys2 {0}
+      run: |
+        cp ${{ steps.strings.outputs.proj-dir }}/build/digilivolo.exe ${{ steps.strings.outputs.proj-dir }}/build/digilivolo-win-ucrt64.exe
+        ls -l ${{ steps.strings.outputs.proj-dir }}/build/digilivolo-win-ucrt64.exe
+        file ${{ steps.strings.outputs.proj-dir }}/build/digilivolo-win-ucrt64.exe
+
+    - name: Make and upload release
+      uses: softprops/action-gh-release@v2
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        fail_on_unmatched_files: false
+        generate_release_notes: true        
+        make_latest: true
+        files: software/build/digilivolo-win-ucrt64.exe
