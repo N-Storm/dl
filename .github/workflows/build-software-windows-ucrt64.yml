@@ -2,11 +2,11 @@ name: Build DigiLivolo software for Windows with MSYS2 UCRT64
 
 on:
   push:
-    branches: [ main ]
+    # branches: [ main ]
     tags:
       - "v*.*.*"
-  pull_request:
-    branches: [ main ]
+  # pull_request:
+    # branches: [ main ]
 
 jobs:
   build:
