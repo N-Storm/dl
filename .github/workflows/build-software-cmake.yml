@@ -10,19 +10,19 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.sys.os }}
 
     strategy:
       # Set fail-fast to false to ensure that feedback is delivered for all matrix combinations. Consider changing this to true when your workflow is stable.
       fail-fast: false
 
       matrix:
-        os: [ubuntu-latest, windows-latest]
-#        sys:
-#          - { os: windows-latest, shell: 'msys2 {0}' }
-#          - { os: ubuntu-latest,  shell: bash  }
+#        os: [ubuntu-latest, windows-latest]
         sys:
-          - shell: [bash, 'msys2 {0}']
+          - { os: windows-latest, shell: 'msys2 {0}' }
+          - { os: ubuntu-latest,  shell: bash  }
+#        sys:
+#          - shell: [bash, 'msys2 {0}']
         build_type: [Release]
         c_compiler: [gcc, clang]
         include:
