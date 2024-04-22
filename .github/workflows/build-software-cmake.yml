@@ -18,7 +18,7 @@ jobs:
 
       matrix:
         os: [ubuntu-latest, windows-latest]
-        binary: ${{ matrix.os == 'windows-latest' && 'digilivolo.exe' || 'digilivolo' }}
+        binary: ${{ matrix.os == 'windows-latest' && '[digilivolo.exe]' || '[digilivolo]' }}
         build_type: [Release]
         c_compiler: [gcc, clang]
         include:
