@@ -23,8 +23,12 @@ jobs:
           - { os: windows-latest, shell: pwsh }
         build_type: [Release]
         c_compiler: [gcc, clang]
-#        include:
-#          - sys:
+        include:
+          - sys:
+              - os: ubuntu-latest
+                c_compiler: gcc
+                binary_orig: digilivolo
+                binary_target: digilivolo-linux-x86_64
 #           - { os: ubuntu-latest,  shell: bash }
 #              c_compiler: gcc
 #              binary_orig: digilivolo

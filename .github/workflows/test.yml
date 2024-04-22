@@ -49,7 +49,7 @@ jobs:
         apt: libudev-dev
           
     - name: Debug
-      if: matrix.sys.shell != 'pwsh'
+      shell: bash
       run: |
         ls -l
         pwd
