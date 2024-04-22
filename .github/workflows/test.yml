@@ -27,6 +27,21 @@ jobs:
       CXX: ${{ matrix.compiler.cxx }}
 
     steps:
+
+    - name: 'Setup MSYS2'
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: UCRT64
+        update: true
+        install: >-
+          git
+          make
+          mingw-w64-ucrt-x86_64-gcc
+        pacboy: >-
+          toolchain:p
+          cmake:p
+          ninja:p
+
     - uses: ConorMacBride/install-package@v1
       with:
         apt: libudev-dev
