@@ -23,18 +23,22 @@ jobs:
         build_type: [Release]
         c_compiler: [gcc, clang]
         include:
-          - os: ubuntu-latest
-            c_compiler: gcc
-            binary_orig: digilivolo
-            binary_target: digilivolo-linux-x86_64
-          - os: ubuntu-latest
-            c_compiler: clang
-          - os: windows-latest
-            c_compiler: gcc
-            binary_orig: digilivolo.exe
-            binary_target: digilivolo-win-x86_64.exe
-          - os: windows-latest
-            c_compiler: clang
+          - sys:
+            - os: ubuntu-latest
+              c_compiler: gcc
+              binary_orig: digilivolo
+              binary_target: digilivolo-linux-x86_64
+          - sys:
+            - os: ubuntu-latest
+              c_compiler: clang
+          - sys:
+            - os: windows-latest
+              c_compiler: gcc
+              binary_orig: digilivolo.exe
+              binary_target: digilivolo-win-x86_64.exe
+          - sys:
+            - os: windows-latest
+              c_compiler: clang
     defaults:
       run:
         shell: ${{ matrix.sys.shell }}
