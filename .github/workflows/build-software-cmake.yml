@@ -18,28 +18,12 @@ jobs:
 
       matrix:
         sys:
-          - { os: ubuntu-latest,  shell: bash }
+          - { os: ubuntu-latest,  shell: bash, c_compiler: gcc, binary_orig: digilivolo }
           - { os: windows-latest, shell: 'msys2 {0}' }
           - { os: windows-latest, shell: pwsh }
         build_type: [Release]
-        c_compiler: [gcc, clang]
-        include:
-          - sys:
-              - { os: ubuntu-latest,  shell: bash }
-            c_compiler: gcc
-            binary_orig: digilivolo
-            binary_target: digilivolo-linux-x86_64
-          - sys:
-              - { os: windows-latest,  shell: pwsh }
-            c_compiler: gcc
-            binary_orig: digilivolo.exe
-            binary_target: digilivolo-win-x86_64.exe
-          - sys:
-              - { os: windows-latest,  shell: 'msys2 {0}' }
-            c_compiler: gcc
-            binary_orig: digilivolo.exe
-            binary_target: digilivolo-win-ucrt64.exe
-
+#        c_compiler: [gcc, clang]
+#        include:
 #           - { os: ubuntu-latest,  shell: bash }
 #              c_compiler: gcc
 #              binary_orig: digilivolo
@@ -78,6 +62,8 @@ jobs:
         pwd
         echo "binary_orig: ${{ matrix.binary_orig }}"
         echo "binary_target: ${{ matrix.binary_target }}"
+        echo "sys.binary_orig: ${{ matrix.sys.binary_orig }}"
+        echo "sys.binary_target: ${{ matrix.sys.binary_target }}"
 
     - name: Install Ninja
       if: matrix.c_compiler != 'mingw-ucrt64'
