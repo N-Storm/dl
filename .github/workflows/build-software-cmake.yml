@@ -40,6 +40,10 @@ jobs:
           - os: windows-latest
             c_compiler: clang
 
+    defaults:
+      run:
+        shell: ${{ matrix.sys.shell }}
+
     steps:
     - uses: ConorMacBride/install-package@v1
       with:
@@ -78,7 +82,6 @@ jobs:
           ninja:p
 
     - name: Configure CMake
-      shell: ${{ matrix.sys.shell }}
       run: >
         cmake -B software/build
         -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
@@ -88,7 +91,6 @@ jobs:
         -S ${{ github.workspace }}/software
 
     - name: Build
-      shell: ${{ matrix.sys.shell }}
       run: cmake --build software/build
 
     - name: Rename binary
