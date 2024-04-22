@@ -54,8 +54,8 @@ jobs:
       run: |
         ls -l
         pwd
-        echo "binary_orig: {{ matrix.binary_orig }}"
-        echo "binary_target: {{ matrix.binary_target }}"
+        echo "binary_orig: ${{ matrix.binary_orig }}"
+        echo "binary_target: ${{ matrix.binary_target }}"
 
     - name: Install Ninja
       id: ninja
@@ -84,7 +84,7 @@ jobs:
     - name: Copy Windows binary
       if: startsWith(matrix.os, 'windows') && matrix.c_compiler == 'gcc'
       run: |
-        copy ${{ steps.strings.outputs.build-output-dir }}\digilivolo.exe ${{ steps.strings.outputs.build-output-dir }}\{{ matrix.binary_target }}
+        copy ${{ steps.strings.outputs.build-output-dir }}\digilivolo.exe ${{ steps.strings.outputs.build-output-dir }}\${{ matrix.binary_target }}
         dir ${{ steps.strings.outputs.build-output-dir }}\digilivolo-win-x86_64.exe
 
     - name: Make and upload release
