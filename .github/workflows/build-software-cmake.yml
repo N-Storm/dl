@@ -19,9 +19,7 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-            binary_orig: digilivolo
           - windows-latest
-            binary_orig: digilivolo.exe
         build_type: [Release]
         c_compiler: [gcc, clang]
         include:
