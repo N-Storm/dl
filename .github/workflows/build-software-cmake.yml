@@ -17,10 +17,10 @@ jobs:
       fail-fast: false
 
       matrix:
-        os: [ ubuntu-latest, windows-latest ]
-        binary: [ ${{ matrix.os == 'windows-latest' && 'digilivolo.exe' || 'digilivolo' }} ]
-        build_type: [ Release ]
-        c_compiler: [ gcc, clang ]
+        os: [ubuntu-latest, windows-latest]
+        binary: [${{ matrix.os == 'windows-latest' && 'digilivolo.exe' || 'digilivolo' }}]
+        build_type: [Release]
+        c_compiler: [gcc, clang]
         include:
           - os: windows-latest
             c_compiler: gcc
