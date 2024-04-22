@@ -18,8 +18,11 @@ jobs:
 
       matrix:
         os: [ubuntu-latest, windows-latest]
+#        sys:
+#          - { os: windows-latest, shell: 'msys2 {0}' }
+#          - { os: ubuntu-latest,  shell: bash  }
         sys:
-          shell: [bash, msys2]
+          - shell: [bash, 'msys2 {0}']
         build_type: [Release]
         c_compiler: [gcc, clang]
         include:
