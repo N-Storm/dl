@@ -25,6 +25,7 @@ jobs:
           - os: windows-latest
             c_compiler: gcc
             binary_target: digilivolo-win-x86_64.exe
+            testvar: test
           - os: windows-latest
             c_compiler: clang
             binary_target: digilivolo-win-clang-x86_64.exe
@@ -51,6 +52,7 @@ jobs:
         pwd
         echo "binary_orig: ${{ matrix.binary }}"
         echo "binary_target: ${{ matrix.binary_target }}"
+        echo "testvar: ${{ matrix.testvar }}"
 
     - name: Install Ninja
       id: ninja
