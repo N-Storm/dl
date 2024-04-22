@@ -17,11 +17,8 @@ jobs:
       fail-fast: false
 
       matrix:
-        os:
-          - ubuntu-latest:
-            binary: digilivolo
-          - windows-latest:
-            binary: digilivolo.exe
+        os: [ ubuntu-latest, windows-latest ]
+        binary: [ ${{ matrix.os == 'windows-latest' && 'digilivolo.exe' || 'digilivolo' }} ]
         build_type: [ Release ]
         c_compiler: [ gcc, clang ]
         include:
@@ -52,7 +49,7 @@ jobs:
       run: |
         ls -l
         pwd
-        echo "binary_orig: ${{ matrix.os.binary }}"
+        echo "binary_orig: ${{ matrix.binary }}"
         echo "binary_target: ${{ matrix.binary_target }}"
 
     - name: Install Ninja
@@ -74,7 +71,7 @@ jobs:
     - name: Rename binary
       shell: bash
       run: |
-        mv software/build/${{ matrix.os.binary }} software/build/${{ matrix.binary_target }}
+        mv software/build/${{ matrix.binary }} software/build/${{ matrix.binary_target }}
         ls -l software/build/${{ matrix.binary_target }}
         file software/build/${{ matrix.binary_target }}
 
