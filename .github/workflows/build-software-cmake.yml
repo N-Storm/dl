@@ -18,7 +18,7 @@ jobs:
 
       matrix:
         sys:
-          - { os: ubuntu-latest,  shell: bash, c_compiler: gcc, binary_orig: digilivolo }
+          - { os: ubuntu-latest,  shell: bash, c_compiler: gcc, binary_orig: digilivolo, binary_target: digilivolo-linux-x86_64 }
           - { os: windows-latest, shell: 'msys2 {0}' }
           - { os: windows-latest, shell: pwsh }
         build_type: [Release]
@@ -71,7 +71,7 @@ jobs:
       uses: turtlesec-no/get-ninja@main
 
     - name: 'Setup MSYS2'
-      if: matrix.sys.os == 'windows-latest'
+      if: matrix.sys.shell == 'msys2 {0}'
       uses: msys2/setup-msys2@v2
       with:
         msystem: UCRT64
@@ -88,7 +88,7 @@ jobs:
     - name: Configure CMake
       run: >
         cmake -B software/build
-        -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
+        -DCMAKE_C_COMPILER=${{ matrix.sys.c_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         -DUSE_SYSTEM_HIDAPI=false
         -G Ninja
@@ -98,18 +98,18 @@ jobs:
       run: cmake --build software/build
 
     - name: Rename binary
-      if: ${{ matrix.binary_target != '' }}
+      if: ${{ matrix.sys.binary_target != '' }}
       shell: bash
       run: |
-        mv software/build/${{ matrix.binary_orig }} software/build/${{ matrix.binary_target }}
-        ls -l software/build/${{ matrix.binary_target }}
-        file software/build/${{ matrix.binary_target }}
+        mv software/build/${{ matrix.sys.binary_orig }} software/build/${{ matrix.sys.binary_target }}
+        ls -l software/build/${{ matrix.sys.binary_target }}
+        file software/build/${{ matrix.sys.binary_target }}
 
     - name: Make and upload release
       uses: softprops/action-gh-release@v2
-      if: startsWith(github.ref, 'refs/tags/') && matrix.binary_target != ''
+      if: startsWith(github.ref, 'refs/tags/') && matrix.sys.binary_target != ''
       with:
         fail_on_unmatched_files: false
         generate_release_notes: true        
         make_latest: true
-        files: software/build/${{ matrix.binary_target }}
+        files: software/build/${{ matrix.sys.binary_target }}
