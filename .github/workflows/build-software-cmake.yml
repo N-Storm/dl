@@ -17,12 +17,9 @@ jobs:
       fail-fast: false
 
       matrix:
-#        os: [ubuntu-latest, windows-latest]
         sys:
           - { os: windows-latest, shell: 'msys2 {0}' }
-          - { os: ubuntu-latest,  shell: bash  }
-#        sys:
-#          - shell: [bash, 'msys2 {0}']
+          - { os: ubuntu-latest,  shell: bash }
         build_type: [Release]
         c_compiler: [gcc, clang]
         include:
@@ -37,12 +34,7 @@ jobs:
             binary_orig: digilivolo.exe
             binary_target: digilivolo-win-x86_64.exe
           - os: windows-latest
-            c_compiler: mingw-ucrt64
-            binary_orig: digilivolo.exe
-            binary_target: digilivolo-win-ucrt64.exe
-          - os: windows-latest
             c_compiler: clang
-
     defaults:
       run:
         shell: ${{ matrix.sys.shell }}
@@ -70,7 +62,7 @@ jobs:
       uses: turtlesec-no/get-ninja@main
 
     - name: 'Setup MSYS2'
-      if: matrix.c_compiler == 'mingw-ucrt64'
+      if: matrix.sys.os == 'windows-latest'
       uses: msys2/setup-msys2@v2
       with:
         msystem: UCRT64

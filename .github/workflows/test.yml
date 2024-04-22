@@ -15,6 +15,7 @@ jobs:
       matrix:
         sys:
           - { os: windows-latest, shell: 'msys2 {0}' }
+          - { os: windows-latest, shell: pwsh }
           - { os: ubuntu-latest,  shell: bash  }
         compiler:
           - { cc: gcc,   cxx: g++ }
@@ -29,7 +30,7 @@ jobs:
     steps:
 
     - name: 'Setup MSYS2'
-      if: matrix.sys.os == 'windows-latest'
+      if: matrix.sys.shell == 'msys2 {0}'
       uses: msys2/setup-msys2@v2
       with:
         msystem: UCRT64
@@ -51,5 +52,6 @@ jobs:
       run: |
         ls -l
         pwd
-        echo "binary_orig: ${{ matrix.binary_orig }}"
-        echo "binary_target: ${{ matrix.binary_target }}"
+        echo "matrix.sys.shell: ${{ matrix.sys.shell }}"
+        echo "matrix.sys.os: ${{ matrix.sys.os }}"
+        gcc --version
