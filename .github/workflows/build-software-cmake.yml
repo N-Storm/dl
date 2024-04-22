@@ -18,6 +18,8 @@ jobs:
 
       matrix:
         os: [ubuntu-latest, windows-latest]
+        sys:
+          shell: [bash, msys2]
         build_type: [Release]
         c_compiler: [gcc, clang]
         include:
@@ -56,10 +58,27 @@ jobs:
         echo "binary_target: ${{ matrix.binary_target }}"
 
     - name: Install Ninja
+      if: matrix.c_compiler != 'mingw-ucrt64'
       id: ninja
       uses: turtlesec-no/get-ninja@main
 
+    - name: 'Setup MSYS2'
+      if: matrix.c_compiler == 'mingw-ucrt64'
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: UCRT64
+        update: true
+        install: >-
+          git
+          make
+          mingw-w64-ucrt-x86_64-gcc
+        pacboy: >-
+          toolchain:p
+          cmake:p
+          ninja:p
+
     - name: Configure CMake
+      shell: ${{ matrix.sys.shell }}
       run: >
         cmake -B software/build
         -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
@@ -69,6 +88,7 @@ jobs:
         -S ${{ github.workspace }}/software
 
     - name: Build
+      shell: ${{ matrix.sys.shell }}
       run: cmake --build software/build
 
     - name: Rename binary
