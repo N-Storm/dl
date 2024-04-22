@@ -77,7 +77,7 @@ jobs:
 
     - name: Make and upload release
       uses: softprops/action-gh-release@v2
-      if: startsWith(github.ref, 'refs/tags/') && ${{ matrix.binary_target != '' }}
+      if: ${{ matrix.binary_target != '' }} && startsWith(github.ref, 'refs/tags/')
       with:
         fail_on_unmatched_files: false
         generate_release_notes: true        
