@@ -26,7 +26,6 @@ jobs:
             c_compiler: gcc
             binary_orig: digilivolo.exe
             binary_target: digilivolo-win-x86_64.exe
-            testvar: test
           - os: windows-latest
             c_compiler: clang
             binary_orig: digilivolo.exe
@@ -54,9 +53,8 @@ jobs:
       run: |
         ls -l
         pwd
-        echo "binary_orig: ${{ matrix.binary }}"
+        echo "binary_orig: ${{ matrix.binary_orig }}"
         echo "binary_target: ${{ matrix.binary_target }}"
-        echo "testvar: ${{ matrix.testvar }}"
 
     - name: Install Ninja
       id: ninja
@@ -77,7 +75,7 @@ jobs:
     - name: Rename binary
       shell: bash
       run: |
-        mv software/build/${{ matrix.binary }} software/build/${{ matrix.binary_target }}
+        mv software/build/${{ matrix.binary_orig }} software/build/${{ matrix.binary_target }}
         ls -l software/build/${{ matrix.binary_target }}
         file software/build/${{ matrix.binary_target }}
 
