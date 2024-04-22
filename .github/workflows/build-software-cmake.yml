@@ -26,7 +26,6 @@ jobs:
         include:
           - sys:
             - { os: ubuntu-latest,  shell: bash }
-              shell: bash
               c_compiler: gcc
               binary_orig: digilivolo
               binary_target: digilivolo-linux-x86_64
