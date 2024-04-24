@@ -70,6 +70,7 @@ jobs:
         echo "sys.toolchain_file: ${{ matrix.sys.toolchain_file }}"
         echo "MY_ENV_VAR: $MY_ENV_VAR"
         echo "MY_ENV_VAR2: $MY_ENV_VAR2"
+        echo "MY_ENV_VAR3: $MY_ENV_VAR3"
       env:
         MY_ENV_VAR: ${{ matrix.sys.toolchain_file == '' && 'EMPTY' || '-DCMAKE_TOOLCHAIN_FILE=software/cmake/{0}' }}
 #        MY_ENV_VAR2: matrix.sys.toolchain_file == '' && 'EMPTY' || "-DCMAKE_TOOLCHAIN_FILE=software/cmake/${{matrix.sys.toolchain_file}}"
