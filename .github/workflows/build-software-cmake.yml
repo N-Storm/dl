@@ -70,7 +70,7 @@ jobs:
         echo "sys.binary_target: ${{ matrix.sys.binary_target }}"
         echo "MY_ENV_VAR: $MY_ENV_VAR"
       env:
-        MY_ENV_VAR: ${{ matrix.toolchain_file == '' && 'EMPTY' || 'FULL' }}
+        MY_ENV_VAR: ${{ matrix.sys.toolchain_file == '' && 'EMPTY' || 'FULL' }}
 
     - name: Install Ninja
       if: matrix.sys.shell != 'msys2 {0}'
@@ -98,7 +98,7 @@ jobs:
         -DCMAKE_C_COMPILER=${{ matrix.sys.c_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         -DUSE_SYSTEM_HIDAPI=false
-        -DCMAKE_TOOLCHAIN_FILE=${{ matrix.toolchain_file }}
+        -DCMAKE_TOOLCHAIN_FILE=${{ matrix.sys.toolchain_file }}
         -G Ninja
         -S software
 
