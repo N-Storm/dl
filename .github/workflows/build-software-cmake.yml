@@ -105,8 +105,8 @@ jobs:
         sudo apt install -y libudev-dev
         sudo dpkg --add-architecture armhf
         sudo apt update
-#        apt install -y crossbuild-essential-armhf
-#        apt install -y libudev-dev:armhf libusb-dev:armhf libc6-dev:armhf pkg-config:armhf
+        sudo apt install -y crossbuild-essential-armhf
+        sudo apt install -y libudev-dev:armhf libusb-dev:armhf libc6-dev:armhf pkg-config:armhf
 
     - name: Configure CMake
       run: >
