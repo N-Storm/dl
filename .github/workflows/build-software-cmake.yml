@@ -50,9 +50,9 @@ jobs:
         shell: ${{ matrix.sys.shell }}
 
     steps:
-    - uses: ConorMacBride/install-package@v1
-      with:
-        apt: libudev-dev
+#    - uses: ConorMacBride/install-package@v1
+#      with:
+#        apt: libudev-dev
           
     - uses: actions/checkout@v4
       with:
