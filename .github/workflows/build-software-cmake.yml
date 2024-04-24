@@ -60,7 +60,6 @@ jobs:
 
     - name: Debug
       shell: bash
-# '-DCMAKE_TOOLCHAIN_FILE=${matrix.toolchain_file}' }}
       run: |
         ls -l
         pwd
@@ -70,7 +69,7 @@ jobs:
         echo "sys.binary_target: ${{ matrix.sys.binary_target }}"
         echo "MY_ENV_VAR: $MY_ENV_VAR"
       env:
-        MY_ENV_VAR: ${{ matrix.sys.toolchain_file == '' && 'EMPTY' || 'FULL' }}
+        MY_ENV_VAR: ${{ matrix.sys.toolchain_file == '' && 'EMPTY' || "-DCMAKE_TOOLCHAIN_FILE=${matrix.toolchain_file}" }}
 
     - name: Install Ninja
       if: matrix.sys.shell != 'msys2 {0}'
