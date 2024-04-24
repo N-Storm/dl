@@ -67,7 +67,7 @@ jobs:
         echo "binary_target: ${{ matrix.binary_target }}"
         echo "sys.binary_orig: ${{ matrix.sys.binary_orig }}"
         echo "sys.binary_target: ${{ matrix.sys.binary_target }}"
-        echo "toolchain_file: ${matrix.sys.toolchain_file}"
+        echo "toolchain_file: $matrix.sys.toolchain_file"
         echo "sys.toolchain_file: ${{ matrix.sys.toolchain_file }}"
         echo "MY_ENV_VAR: $MY_ENV_VAR"
       env:
