@@ -102,11 +102,9 @@ jobs:
       shell: bash
       run: |
         echo "Installing cross toolchain"
-        id
-        sudo apt-get install -y libudev-dev
-#	apt install -y libudev-dev
-#        dpkg --add-architecture armhf
-#        apt update
+        sudo apt install -y libudev-dev
+        sudo dpkg --add-architecture armhf
+        sudo apt update
 #        apt install -y crossbuild-essential-armhf
 #        apt install -y libudev-dev:armhf libusb-dev:armhf libc6-dev:armhf pkg-config:armhf
 
