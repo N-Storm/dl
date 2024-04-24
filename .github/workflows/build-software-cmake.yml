@@ -102,6 +102,8 @@ jobs:
       shell: bash
       run: |
         echo "Installing cross toolchain"
+        id
+        sudo apt-get install -y libudev-dev
 #	apt install -y libudev-dev
 #        dpkg --add-architecture armhf
 #        apt update
