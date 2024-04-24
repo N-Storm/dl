@@ -61,7 +61,8 @@ jobs:
     - name: Debug
       shell: bash
       env:
-        TEST_ENV_VAR: ${{ matrix.toolchain_file == '' && 'EMPTY' || '-DCMAKE_TOOLCHAIN_FILE=${matrix.toolchain_file}' }}
+        TEST_ENV_VAR: ${{ matrix.toolchain_file == '' && 'EMPTY' || 'FULL' }}
+# '-DCMAKE_TOOLCHAIN_FILE=${matrix.toolchain_file}' }}
       run: |
         ls -l
         pwd
