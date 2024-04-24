@@ -102,11 +102,11 @@ jobs:
       shell: bash
       run: |
         echo "Installing cross toolchain"
-	apt install -y libudev-dev
-        dpkg --add-architecture armhf
-        apt update
-        apt install -y crossbuild-essential-armhf
-        apt install -y libudev-dev:armhf libusb-dev:armhf libc6-dev:armhf pkg-config:armhf
+#	apt install -y libudev-dev
+#        dpkg --add-architecture armhf
+#        apt update
+#        apt install -y crossbuild-essential-armhf
+#        apt install -y libudev-dev:armhf libusb-dev:armhf libc6-dev:armhf pkg-config:armhf
 
     - name: Configure CMake
       run: >
