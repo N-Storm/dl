@@ -101,6 +101,7 @@ jobs:
       if: ${{ matrix.sys.toolchain_file != '' }}
       shell: bash
       run: |
+        echo "Installing cross toolchain"
 	apt install -y libudev-dev
         dpkg --add-architecture armhf
         apt update
