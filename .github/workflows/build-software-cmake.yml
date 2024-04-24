@@ -68,14 +68,14 @@ jobs:
         echo "sys.binary_orig: ${{ matrix.sys.binary_orig }}"
         echo "sys.binary_target: ${{ matrix.sys.binary_target }}"
         echo "sys.toolchain_file: ${{ matrix.sys.toolchain_file }}"
-        echo "MY_ENV_VAR: $MY_ENV_VAR"
+        echo "CMAKE_TOOLCHAIN_FILE_OPT: $CMAKE_TOOLCHAIN_FILE_OPT"
         echo "MY_ENV_VAR2: $MY_ENV_VAR2"
         echo "MY_ENV_VAR3: $MY_ENV_VAR3"
       env:
-        MY_ENV_VAR: ${{ matrix.sys.toolchain_file == '' && 'EMPTY' || format('-DCMAKE_TOOLCHAIN_FILE=software/cmake/{0}', matrix.sys.toolchain_file) }}
+        CMAKE_TOOLCHAIN_FILE_OPT: ${{ matrix.sys.toolchain_file == '' && 'EMPTY' || format('-DCMAKE_TOOLCHAIN_FILE=software/cmake/{0}', matrix.sys.toolchain_file) }}
 #        MY_ENV_VAR2: matrix.sys.toolchain_file == '' && 'EMPTY' || "-DCMAKE_TOOLCHAIN_FILE=software/cmake/${{matrix.sys.toolchain_file}}"
         MY_ENV_VAR2: ${{ format('-DCMAKE_TOOLCHAIN_FILE=software/cmake/{0}', matrix.sys.toolchain_file ) }}
-        MY_ENV_VAR3: ${{ env.MY_ENV_VAR2 == 'software/cmake/' && 'EMPTY' || matrix.sys.toolchain_file }}
+        MY_ENV_VAR3: ${{ env.MY_ENV_VAR2 == '-DCMAKE_TOOLCHAIN_FILE=software/cmake/' && 'EMPTY' || env.MY_ENV_VAR2 }}
 
     - name: Install Ninja
       if: matrix.sys.shell != 'msys2 {0}'
