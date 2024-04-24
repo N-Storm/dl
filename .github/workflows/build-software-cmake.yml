@@ -50,16 +50,16 @@ jobs:
         shell: ${{ matrix.sys.shell }}
 
     steps:
-    - uses: ConorMacBride/install-package@v1
-      with:
-        apt: libudev-dev
-
     - name: Remove MS repo
       run: |
         sudo ls -l /etc/apt/sources.list.d
         sudo cat /etc/apt/sources.list
         sudo grep packages.microsoft.com /etc/apt/sources.list.d/*
           
+    - uses: ConorMacBride/install-package@v1
+      with:
+        apt: libudev-dev
+
     - uses: actions/checkout@v4
       with:
         submodules: 'recursive'
