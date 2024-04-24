@@ -54,7 +54,10 @@ jobs:
     - name: install sudo
       run: |
         apt update
-        apt install -y sudo
+        apt install -y sudo git
+        git --version
+        echo
+        cat /etc/os-release
 
 #    - name: Remove MS repo
 #      run: |
