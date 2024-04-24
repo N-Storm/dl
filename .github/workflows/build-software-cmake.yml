@@ -50,9 +50,9 @@ jobs:
         shell: ${{ matrix.sys.shell }}
 
     steps:
-    - uses: ConorMacBride/install-package@v1
-      with:
-        apt: libudev-dev
+#    - uses: ConorMacBride/install-package@v1
+#      with:
+#        apt: libudev-dev
           
     - uses: actions/checkout@v4
       with:
@@ -101,6 +101,7 @@ jobs:
       if: matrix.sys.toolchain_file != ''
       shell: bash
       run: |
+	apt install -y libudev-dev
         dpkg --add-architecture armhf
         apt update
         apt install -y crossbuild-essential-armhf
