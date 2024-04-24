@@ -54,7 +54,7 @@ jobs:
     - name: install sudo
       run: |
         apt update
-        apt install -y sudo git
+        apt install -y sudo git python3 python3-pip
         git --version
         echo
         cat /etc/os-release
