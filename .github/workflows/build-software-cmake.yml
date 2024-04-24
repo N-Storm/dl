@@ -51,19 +51,19 @@ jobs:
         shell: ${{ matrix.sys.shell }}
 
     steps:
-    - name: Remove MS repo
-      run: |
-        sudo ls -l /etc/apt/sources.list.d
-        sudo cat /etc/apt/sources.list
-        echo
-        sudo grep -H packages.microsoft.com /etc/apt/sources.list.d/*
-        echo
-        sudo rm /etc/apt/sources.list.d/microsoft-prod.list
-        sudo apt update
+#    - name: Remove MS repo
+#      run: |
+#        sudo ls -l /etc/apt/sources.list.d
+#        sudo cat /etc/apt/sources.list
+#        echo
+#        sudo grep -H packages.microsoft.com /etc/apt/sources.list.d/*
+#        echo
+#        sudo rm /etc/apt/sources.list.d/microsoft-prod.list
+#        sudo apt update
           
     - uses: ConorMacBride/install-package@v1
       with:
-        apt: libudev-dev
+        apt: [ libudev-dev, sudo, gcc, cmake, build-essential, make ]
 
     - uses: actions/checkout@v4
       with:
