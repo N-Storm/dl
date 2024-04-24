@@ -52,7 +52,9 @@ jobs:
 
     steps:
     - name: install sudo
-      run: apt install -y sudo
+      run: |
+        apt update
+        apt install -y sudo
 
 #    - name: Remove MS repo
 #      run: |
