@@ -98,7 +98,7 @@ jobs:
           ninja:p
 
     - name: Install arm-linux-gnueabi toolchain
-      if: matrix.sys.toolchain_file != ''
+      if: ${{ matrix.sys.toolchain_file != '' }}
       shell: bash
       run: |
 	apt install -y libudev-dev
