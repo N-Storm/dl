@@ -50,9 +50,9 @@ jobs:
         shell: ${{ matrix.sys.shell }}
 
     steps:
-#    - uses: ConorMacBride/install-package@v1
-#      with:
-#        apt: libudev-dev
+    - uses: ConorMacBride/install-package@v1
+      with:
+        apt: libudev-dev
           
     - uses: actions/checkout@v4
       with:
@@ -96,6 +96,15 @@ jobs:
           toolchain:p
           cmake:p
           ninja:p
+
+    - name: Install arm-linux-gnueabi toolchain
+      if: matrix.sys.toolchain_file != ''
+      shell: bash
+      run: |
+        dpkg --add-architecture armhf
+        apt update
+        apt install -y crossbuild-essential-armhf
+        apt install -y libudev-dev:armhf libusb-dev:armhf libc6-dev:armhf pkg-config:armhf
 
     - name: Configure CMake
       run: >
