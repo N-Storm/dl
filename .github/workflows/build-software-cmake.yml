@@ -71,7 +71,7 @@ jobs:
         echo "sys.toolchain_file: ${{ matrix.sys.toolchain_file }}"
         echo "MY_ENV_VAR: $MY_ENV_VAR"
       env:
-        MY_ENV_VAR: ${{ matrix.sys.toolchain_file == '' && 'EMPTY' || '-DCMAKE_TOOLCHAIN_FILE=$matrix.sys.toolchain_file' }}
+        MY_ENV_VAR: ${{ matrix.sys.toolchain_file == '' && 'EMPTY' || '-DCMAKE_TOOLCHAIN_FILE=${{ matrix.sys.toolchain_file }}' }}
 
     - name: Install Ninja
       if: matrix.sys.shell != 'msys2 {0}'
