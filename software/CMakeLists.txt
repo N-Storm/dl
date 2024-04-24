@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 set(PROJECT_NAME "digilivolo")
 project(${PROJECT_NAME} C)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -std=gnu11 -flto -ffunction-sections -fdata-sections -ffat-lto-objects -Wall -Wl,--warn-common -Wl,--gc-sections")
+if("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
+  set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3 -std=gnu11 -flto -ffunction-sections -fdata-sections -ffat-lto-objects -Wall -Wl,--warn-common -Wl,--gc-sections")
+endif()
 set(HIDAPI_WITH_LIBUSB FALSE)
 set(BUILD_SHARED_LIBS FALSE) # HIDAPI as static library on all platforms
 
@@ -38,7 +40,7 @@ message(STATUS "Using HIDAPI: ${hidapi_VERSION}")
 add_subdirectory(lib/argp-standalone)
 
 configure_file(src/git_version.h.in src/git_version.h @ONLY)
-add_executable(${PROJECT_NAME} src/digilivolo.c)
+add_executable(${PROJECT_NAME} src/args.c src/digilivolo.c src/usb_func.c)
 target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/src")
 target_link_libraries(${PROJECT_NAME} hidapi::hidapi argp-standalone)
 
