@@ -76,6 +76,7 @@ jobs:
       if: matrix.sys.container == 'ghcr.io/phusion/holy-build-box/hbb-64'
 
     - name: Configure HBB env & checkout submodules
+      if: matrix.sys.container == 'ghcr.io/phusion/holy-build-box/hbb-64'
       run: |
         ln -s /usr/bin/cmake3 /usr/bin/cmake
         cd dl && git submodule init && git submodule update
