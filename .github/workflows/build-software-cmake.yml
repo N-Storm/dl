@@ -90,8 +90,7 @@ jobs:
 
     - name: Install Ninja
       if: matrix.sys.shell == 'pwsh'
-¹      if: matrix.sys.shell != 'msys2 {0}'
-      id: ninja
+#      if: matrix.sys.shell != 'msys2 {0}'
       uses: turtlesec-no/get-ninja@main
 
     - name: 'Setup MSYS2'
