@@ -74,23 +74,22 @@ jobs:
 
     - uses: actions/checkout@v3
       if: matrix.sys.container == 'ghcr.io/phusion/holy-build-box/hbb-64'
-    - run: |
+
+    - name: Configure HBB env & checkout submodules
+      if: matrix.sys.container == 'ghcr.io/phusion/holy-build-box/hbb-64'
+      run: |
         ln -s /usr/bin/cmake3 /usr/bin/cmake
+        cd /__w/dl/dl # TODO - FIXME
         git submodule init
         git submodule update
-
-#    - name: Configure HBB env & checkout submodules
-#      if: matrix.sys.container == 'ghcr.io/phusion/holy-build-box/hbb-64'
-#      run: |
-#        ln -s /usr/bin/cmake3 /usr/bin/cmake
-#        git submodule init
-#        git submodule update
 
     - name: Debug
       shell: bash
       run: |
         ls -l
         pwd
+        echo ${{ github.workspace }}
+        echo $GITHUB_WORKSPACE
         echo "binary_orig: ${{ matrix.binary_orig }}"
         echo "binary_target: ${{ matrix.binary_target }}"
         echo "sys.binary_orig: ${{ matrix.sys.binary_orig }}"
