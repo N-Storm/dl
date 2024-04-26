@@ -56,6 +56,7 @@ jobs:
         cat /etc/os-release
 
     - uses: ConorMacBride/install-package@v1
+      if: matrix.sys.container != 'ghcr.io/phusion/holy-build-box/hbb-64'
       with:
         apt: libudev-dev sudo gcc cmake build-essential make sudo libusb-dev libc6-dev pkg-config file ninja-build clang
 
