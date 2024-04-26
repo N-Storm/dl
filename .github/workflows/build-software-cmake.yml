@@ -63,7 +63,7 @@ jobs:
 
     - uses: ConorMacBride/install-package@v1
       with:
-        apt: libudev-dev sudo gcc cmake build-essential make sudo libusb-dev libc6-dev pkg-config file
+        apt: libudev-dev sudo gcc cmake build-essential make sudo libusb-dev libc6-dev pkg-config file ninja-build
 
     - uses: actions/checkout@v4
       with:
