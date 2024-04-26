@@ -34,8 +34,8 @@ jobs:
         shell: ${{ matrix.sys.shell }}
 
     steps:
-    - name: Install prereq packages on Debian container
-      if: matrix.sys.container == 'debian'
+    - name: Install prereq packages on container
+      if: matrix.sys.container
       run: |
         apt update
         apt install -y sudo git dialog python3 python3-pip python3-setuptools
