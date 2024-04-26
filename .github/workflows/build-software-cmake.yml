@@ -63,7 +63,7 @@ jobs:
 
     - uses: ConorMacBride/install-package@v1
       with:
-        apt: libudev-dev sudo gcc cmake build-essential make sudo libusb-dev libc6-dev pkg-config file ninja-build
+        apt: libudev-dev sudo gcc cmake build-essential make sudo libusb-dev libc6-dev pkg-config file ninja-build clang
 
     - uses: actions/checkout@v4
       with:
@@ -132,13 +132,20 @@ jobs:
     - name: Build
       run: cmake --build software/build
 
+    - name: Print binary info
+      shell: bash
+      run: |
+        objdump -x software/build/${{ matrix.sys.binary_target }}
+        size -A software/build/${{ matrix.sys.binary_target }}
+	ldd -v software/build/${{ matrix.sys.binary_target }}
+        file software/build/${{ matrix.sys.binary_target }}
+        ls -l software/build/${{ matrix.sys.binary_target }}
+
     - name: Rename binary
       if: ${{ matrix.sys.binary_target != '' }}
       shell: bash
       run: |
         mv software/build/${{ matrix.sys.binary_orig }} software/build/${{ matrix.sys.binary_target }}
-        ls -l software/build/${{ matrix.sys.binary_target }}
-        file software/build/${{ matrix.sys.binary_target }}
 
     - name: Make and upload release
       uses: softprops/action-gh-release@v2
