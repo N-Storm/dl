@@ -150,7 +150,7 @@ jobs:
     - name: Build
       run: cmake --build software/build
 
-    - name: Print binary info
+    - name: Print info on compiled binary
       shell: bash
       run: |
         objdump -x software/build/${{ matrix.sys.binary_orig }} || /bin/true
