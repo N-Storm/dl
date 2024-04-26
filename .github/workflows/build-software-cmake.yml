@@ -19,33 +19,15 @@ jobs:
 
       matrix:
         sys:
-          - { os: ubuntu-latest,  shell: bash, c_compiler: gcc, binary_orig: digilivolo, binary_target: digilivolo-linux-x86_64 }
-          - { os: ubuntu-latest,  shell: bash, c_compiler: arm-arm-linux-gnueabihf-gcc, toolchain_file: arm-linux-gnueabihf-gcc-toolchain.cmake, binary_orig: digilivolo, binary_target: digilivolo-linux-armhf }
-          - { os: ubuntu-latest,  shell: bash, c_compiler: clang, binary_orig: digilivolo }
-          - { os: windows-latest, shell: 'msys2 {0}', c_compiler: gcc, binary_orig: digilivolo.exe, binary_target: digilivolo-win-x86_64.exe }
-          - { os: windows-latest, shell: pwsh, c_compiler: gcc, binary_orig: digilivolo.exe }
-          - { os: windows-latest, shell: pwsh, c_compiler: clang, binary_orig: digilivolo.exe }
+          - { os: ubuntu-latest,  container: debian, shell: bash,        c_compiler: gcc, binary_orig: digilivolo, binary_target: digilivolo-linux-x86_64 }
+          - { os: ubuntu-latest,                     shell: bash,        c_compiler: gcc, binary_orig: digilivolo, binary_target: digilivolo-linux-x86_64 }
+          - { os: ubuntu-latest,  container: debian, shell: bash,        c_compiler: arm-arm-linux-gnueabihf-gcc, toolchain_file: arm-linux-gnueabihf-gcc-toolchain.cmake, binary_orig: digilivolo, binary_target: digilivolo-linux-armhf }
+          - { os: ubuntu-latest,                     shell: bash,        c_compiler: clang, binary_orig: digilivolo }
+          - { os: windows-latest,                    shell: 'msys2 {0}', c_compiler: gcc, binary_orig: digilivolo.exe, binary_target: digilivolo-win-x86_64.exe }
+          - { os: windows-latest,                    shell: pwsh,        c_compiler: gcc, binary_orig: digilivolo.exe }
+          - { os: windows-latest,                    shell: pwsh,        c_compiler: clang, binary_orig: digilivolo.exe }
         build_type: [Release]
-#        c_compiler: [gcc, clang]
-#        include:
-#           - { os: ubuntu-latest,  shell: bash }
-#              c_compiler: gcc
-#              binary_orig: digilivolo
-#              binary_target: digilivolo-linux-x86_64
-#          - sys:
-#            - os: ubuntu-latest
-#              shell: bash
-#              c_compiler: clang
-#          - sys:
-#            - os: windows-latest
-#              shell: 'msys2 {0}'
-#              c_compiler: gcc
-#              binary_orig: digilivolo.exe
-#              binary_target: digilivolo-win-x86_64.exe
-#          - sys:
-#            - os: windows-latest
-#              shell: pwsh
-#              c_compiler: clang
+
     defaults:
       run:
         shell: ${{ matrix.sys.shell }}
@@ -58,6 +40,7 @@ jobs:
         apt install -y sudo git dialog python3 python3-pip python3-setuptools
         apt -y full-upgrade
         git --version
+	git config --global --add safe.directory /__w/dl/dl
         echo
         cat /etc/os-release
 
