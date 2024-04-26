@@ -34,12 +34,22 @@ jobs:
         shell: ${{ matrix.sys.shell }}
 
     steps:
-    - name: Install prereq packages on container
-      if: matrix.sys.container
+    - name: Install prereq packages on Debian container
+      if: matrix.sys.container == 'debian'
       run: |
         apt update
         apt install -y sudo git dialog python3 python3-pip python3-setuptools
         apt -y full-upgrade
+        git --version
+        git config --global --add safe.directory /__w/dl/dl
+        echo
+        cat /etc/os-release
+
+    - name: Install prereq packages on HBB container
+      if: matrix.sys.container == 'ghcr.io/phusion/holy-build-box/hbb-64'
+      run: |
+        yum update -y
+        yum install -y sudo git dialog python3 python3-pip python3-setuptools ninja make cmake3
         git --version
         git config --global --add safe.directory /__w/dl/dl
         echo
