@@ -49,31 +49,34 @@ jobs:
       if: matrix.sys.container == 'ghcr.io/phusion/holy-build-box/hbb-64'
       run: |
         apt update || yum -y install https://packages.endpointdev.com/rhel/7/os/x86_64/endpoint-repo.x86_64.rpm
-        apt -y full-upgrade || yum update -y
+#        apt -y full-upgrade || yum update -y
+        apt -y full-upgrade || yum check-update
         apt install -y sudo git dialog python3 python3-pip python3-setuptools curl wget || yum install -y sudo git dialog python3 python3-pip python3-setuptools ninja-build make cmake3 libusb-devel libudev-devel curl wget
         git --version
         git config --global --add safe.directory /__w/dl/dl
         echo
         cat /etc/os-release
 
-    - uses: awalsh128/cache-apt-pkgs-action@latest
-      if: matrix.sys.os == 'ubuntu-latest' && matrix.sys.container != 'ghcr.io/phusion/holy-build-box/hbb-64'
-      with:
-        packages: libudev-dev sudo gcc cmake build-essential make sudo libusb-dev libc6-dev pkg-config file ninja-build clang
-        version: 1.0
+#    - uses: awalsh128/cache-apt-pkgs-action@latest
+#      if: matrix.sys.os == 'ubuntu-latest' && matrix.sys.container != 'ghcr.io/phusion/holy-build-box/hbb-64'
+#      with:
+#        packages: libudev-dev sudo gcc cmake build-essential make sudo libusb-dev libc6-dev pkg-config file ninja-build clang
+#        version: 1.0
 
     - uses: ConorMacBride/install-package@v1
-      if: matrix.sys.container != 'ghcr.io/phusion/holy-build-box/hbb-64'
+#      if: matrix.sys.container != 'ghcr.io/phusion/holy-build-box/hbb-64'
       with:
         apt: libudev-dev sudo gcc cmake build-essential make sudo libusb-dev libc6-dev pkg-config file ninja-build clang
 
-    - uses: actions/checkout@v4
-      if: matrix.sys.container != 'ghcr.io/phusion/holy-build-box/hbb-64'
-      with:
-        submodules: 'recursive'
+#    - uses: actions/checkout@v4
+#      if: matrix.sys.container != 'ghcr.io/phusion/holy-build-box/hbb-64'
+#      with:
+#        submodules: 'recursive'
 
     - uses: actions/checkout@v3
-      if: matrix.sys.container == 'ghcr.io/phusion/holy-build-box/hbb-64'
+#      if: matrix.sys.container == 'ghcr.io/phusion/holy-build-box/hbb-64'
+      with:
+        submodules: 'recursive'
 
     - name: Configure HBB env & checkout submodules
       if: matrix.sys.container == 'ghcr.io/phusion/holy-build-box/hbb-64'
@@ -163,7 +166,7 @@ jobs:
         mv software/build/${{ matrix.sys.binary_orig }} software/build/${{ matrix.sys.binary_target }}
 
     - name: Make and upload release
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/') && matrix.sys.binary_target != ''
       with:
         fail_on_unmatched_files: false
