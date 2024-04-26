@@ -55,6 +55,12 @@ jobs:
         echo
         cat /etc/os-release
 
+    - uses: awalsh128/cache-apt-pkgs-action@latest
+      if: matrix.sys.container != 'ghcr.io/phusion/holy-build-box/hbb-64'
+      with:
+        packages: libudev-dev sudo gcc cmake build-essential make sudo libusb-dev libc6-dev pkg-config file ninja-build clang
+        version: 1.0
+
     - uses: ConorMacBride/install-package@v1
       if: matrix.sys.container != 'ghcr.io/phusion/holy-build-box/hbb-64'
       with:
@@ -65,7 +71,7 @@ jobs:
       with:
         submodules: 'recursive'
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       if: matrix.sys.container == 'ghcr.io/phusion/holy-build-box/hbb-64'
       with:
         submodules: 'recursive'
