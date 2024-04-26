@@ -135,11 +135,11 @@ jobs:
     - name: Print binary info
       shell: bash
       run: |
-        objdump -x software/build/${{ matrix.sys.binary_target }}
-        size -A software/build/${{ matrix.sys.binary_target }}
-        ldd -v software/build/${{ matrix.sys.binary_target }}
-        file software/build/${{ matrix.sys.binary_target }}
-        ls -l software/build/${{ matrix.sys.binary_target }}
+        objdump -x software/build/${{ matrix.sys.binary_orig }}
+        size -A software/build/${{ matrix.sys.binary_orig }}
+        ldd -v software/build/${{ matrix.sys.binary_orig }}
+        file software/build/${{ matrix.sys.binary_orig }}
+        ls -l software/build/${{ matrix.sys.binary_orig }}
 
     - name: Rename binary
       if: ${{ matrix.sys.binary_target != '' }}
