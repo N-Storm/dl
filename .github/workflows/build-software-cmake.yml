@@ -74,7 +74,7 @@ jobs:
 
     - uses: actions/checkout@v3
       if: matrix.sys.container == 'ghcr.io/phusion/holy-build-box/hbb-64'
-      run: |
+    - run: |
         ln -s /usr/bin/cmake3 /usr/bin/cmake
         git submodule init
         git submodule update
