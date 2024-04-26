@@ -27,11 +27,9 @@ execute_process(
 
 message(STATUS "Project: ${PROJECT_NAME} ${GIT_VERSION}")
 
-# set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
-
-# find_package(argp)
-
-# message(STATUS "ARGP: ARGP_FOUND = ${ARGP_FOUND}, ARGP_LIBRARIES = ${ARGP_LIBRARIES}, ARGP_INCLUDE_PATH = ${ARGP_INCLUDE_PATH}")
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+find_package(argp)
+message(STATUS "ARGP: ARGP_FOUND = ${ARGP_FOUND}, ARGP_LIBRARIES = ${ARGP_LIBRARIES}, ARGP_INCLUDE_PATH = ${ARGP_INCLUDE_PATH}")
 
 if(NOT USE_SYSTEM_HIDAPI)
     add_subdirectory(lib/hidapi)
