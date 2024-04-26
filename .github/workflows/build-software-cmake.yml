@@ -55,7 +55,7 @@ jobs:
       if: matrix.sys.os == 'ubuntu-latest'
       run: |
         apt update
-        apt install -y sudo git python3 python3-pip python3-setuptools ninja-build dialog
+        apt install -y sudo git dialog python3 python3-pip python3-setuptools
         apt -y full-upgrade
         git --version
         echo
@@ -93,15 +93,15 @@ jobs:
         echo "MY_ENV_VAR2: $MY_ENV_VAR2"
         echo "MY_ENV_VAR3: $MY_ENV_VAR3"
       env:
-        CMAKE_TOOLCHAIN_FILE_OPT: ${{ matrix.sys.toolchain_file == '' && '-DDUMMY=dummy' || format('-DCMAKE_TOOLCHAIN_FILE=cmake/{0}', matrix.sys.toolchain_file) }}
+        CMAKE_TOOLCHAIN_FILE_OPT: ${{ matrix.sys.toolchain_file == '' && ' ' || format('-DCMAKE_TOOLCHAIN_FILE=cmake/{0}', matrix.sys.toolchain_file) }}
 #        MY_ENV_VAR2: matrix.sys.toolchain_file == '' && 'EMPTY' || "-DCMAKE_TOOLCHAIN_FILE=software/cmake/${{matrix.sys.toolchain_file}}"
         MY_ENV_VAR2: ${{ format('-DCMAKE_TOOLCHAIN_FILE=software/cmake/{0}', matrix.sys.toolchain_file ) }}
         MY_ENV_VAR3: ${{ env.MY_ENV_VAR2 == '-DCMAKE_TOOLCHAIN_FILE=software/cmake/' && 'EMPTY' || env.MY_ENV_VAR2 }}
 
-#    - name: Install Ninja
-#      if: matrix.sys.shell != 'msys2 {0}'
-#      id: ninja
-#      uses: turtlesec-no/get-ninja@main
+    - name: Install Ninja
+      if: matrix.sys.shell != 'msys2 {0}'
+      id: ninja
+      uses: turtlesec-no/get-ninja@main
 
     - name: 'Setup MSYS2'
       if: matrix.sys.shell == 'msys2 {0}'
@@ -137,7 +137,7 @@ jobs:
         -G Ninja
         -S software
       env:
-        CMAKE_TOOLCHAIN_FILE_OPT: ${{ matrix.sys.toolchain_file == '' && '-DDUMMY=dummy' || format('-DCMAKE_TOOLCHAIN_FILE=cmake/{0}', matrix.sys.toolchain_file) }}
+        CMAKE_TOOLCHAIN_FILE_OPT: ${{ matrix.sys.toolchain_file == '' && ' ' || format('-DCMAKE_TOOLCHAIN_FILE=cmake/{0}', matrix.sys.toolchain_file) }}
 
     - name: Build
       run: cmake --build software/build
