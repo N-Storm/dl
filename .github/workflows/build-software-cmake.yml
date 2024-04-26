@@ -61,16 +61,6 @@ jobs:
         echo
         cat /etc/os-release
 
-#    - name: Remove MS repo
-#      run: |
-#        sudo ls -l /etc/apt/sources.list.d
-#        sudo cat /etc/apt/sources.list
-#        echo
-#        sudo grep -H packages.microsoft.com /etc/apt/sources.list.d/*
-#        echo
-#        sudo rm /etc/apt/sources.list.d/microsoft-prod.list
-#        sudo apt update
-          
     - uses: ConorMacBride/install-package@v1
       with:
         apt: libudev-dev sudo gcc cmake build-essential make sudo libusb-dev libc6-dev pkg-config file
@@ -99,7 +89,8 @@ jobs:
         MY_ENV_VAR3: ${{ env.MY_ENV_VAR2 == '-DCMAKE_TOOLCHAIN_FILE=software/cmake/' && 'EMPTY' || env.MY_ENV_VAR2 }}
 
     - name: Install Ninja
-      if: matrix.sys.shell != 'msys2 {0}'
+      if: matrix.sys.shell == 'pwsh'
+¹      if: matrix.sys.shell != 'msys2 {0}'
       id: ninja
       uses: turtlesec-no/get-ninja@main
 
