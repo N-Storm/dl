@@ -56,7 +56,7 @@ jobs:
       with:
         submodules: 'recursive'
 
-    - name: Configure HBB env & checkout submodules
+    - name: '[HBB] Create symlink cmake -> cmake3'
       if: matrix.sys.container == 'ghcr.io/phusion/holy-build-box/hbb-64'
       run: ln -s /usr/bin/cmake3 /usr/bin/cmake
 
@@ -127,9 +127,13 @@ jobs:
     - name: Print info on compiled binary
       shell: bash
       run: |
+        echo "=== objdump -x ==="
         objdump -x software/build/${{ matrix.sys.binary_orig }} || /bin/true
+        echo "=== size -A ==="
         size -A software/build/${{ matrix.sys.binary_orig }} || /bin/true
+        echo "=== ldd -v ==="
         ldd -v software/build/${{ matrix.sys.binary_orig }} || /bin/true
+        echo "=== file & ls ==="
         file software/build/${{ matrix.sys.binary_orig }} || /bin/true
         ls -l software/build/${{ matrix.sys.binary_orig }} || /bin/true
 

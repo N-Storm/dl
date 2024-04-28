@@ -1,6 +1,7 @@
 #.rst:
 # FindHIDAPI
 # ----------
+# https://github.com/rpavlik/cmake-modules
 #
 # Try to find HIDAPI library, from http://www.signal11.us/oss/hidapi/
 #
