@@ -19,15 +19,15 @@ jobs:
 
       matrix:
         sys:
-          - { os: ubuntu-latest, containerz: none, shell: bash       , c_compiler: gcc    , binary_orig: digilivolo    , binary_target: digilivolo-hbb64, container: 'ghcr.io/phusion/holy-build-box/hbb-64' }
+          - { os: ubuntu-latest                        , shell: bash       , c_compiler: gcc    , binary_orig: digilivolo    , binary_target: digilivolo-hbb64, container: 'ghcr.io/phusion/holy-build-box/hbb-64' }
           - { os: ubuntu-latest, container: 'debian:10', shell: bash       , c_compiler: gcc    , binary_orig: digilivolo    , binary_target: digilivolo-linux-debian-x86_64 }
-#          - { os: ubuntu-20.04                         , shell: bash       , c_compiler: gcc    , binary_orig: digilivolo    , binary_target: digilivolo-linux-ubuntu-x86_64 }
-#          - { os: ubuntu-latest, container: 'debian'   , shell: bash       , crosscompile: armhf, binary_orig: digilivolo    , binary_target: digilivolo-linux-armhf }
-#          - { os: ubuntu-latest, container: 'debian'   , shell: bash       , crosscompile: arm64, binary_orig: digilivolo    , binary_target: digilivolo-linux-arm64 }
-#          - { os: ubuntu-20.04                         , shell: bash       , c_compiler: clang  , binary_orig: digilivolo    , binary_target: digilivolo-clang64 }
-#          - { os: windows-latest                       , shell: 'msys2 {0}', c_compiler: gcc    , binary_orig: digilivolo.exe, binary_target: digilivolo-win-ucrt64.exe }
-#          - { os: windows-latest                       , shell: pwsh       , c_compiler: gcc    , binary_orig: digilivolo.exe, binary_target: digilivolo-win-x86_64.exe }
-#          - { os: windows-latest                       , shell: pwsh       , c_compiler: clang  , binary_orig: digilivolo.exe, binary_target: digilivolo-win-clang64.exe }
+          - { os: ubuntu-20.04                         , shell: bash       , c_compiler: gcc    , binary_orig: digilivolo    , binary_target: digilivolo-linux-ubuntu-x86_64 }
+          - { os: ubuntu-latest, container: 'debian'   , shell: bash       , crosscompile: armhf, binary_orig: digilivolo    , binary_target: digilivolo-linux-armhf }
+          - { os: ubuntu-latest, container: 'debian'   , shell: bash       , crosscompile: arm64, binary_orig: digilivolo    , binary_target: digilivolo-linux-arm64 }
+          - { os: ubuntu-20.04                         , shell: bash       , c_compiler: clang  , binary_orig: digilivolo    , binary_target: digilivolo-clang64 }
+          - { os: windows-latest                       , shell: 'msys2 {0}', c_compiler: gcc    , binary_orig: digilivolo.exe, binary_target: digilivolo-win-ucrt64.exe }
+          - { os: windows-latest                       , shell: pwsh       , c_compiler: gcc    , binary_orig: digilivolo.exe, binary_target: digilivolo-win-x86_64.exe }
+          - { os: windows-latest                       , shell: pwsh       , c_compiler: clang  , binary_orig: digilivolo.exe, binary_target: digilivolo-win-clang64.exe }
         build_type: [Release]
 
     defaults:
