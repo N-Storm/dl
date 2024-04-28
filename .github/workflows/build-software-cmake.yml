@@ -34,7 +34,7 @@ jobs:
 #          - { os: windows-latest                       , shell: pwsh       , c_compiler: gcc    , binary_orig: digilivolo.exe, binary_target: digilivolo-win-x86_64.exe }
 #          - { os: windows-latest                       , shell: pwsh       , c_compiler: clang  , binary_orig: digilivolo.exe, binary_target: digilivolo-win-clang64.exe }
         build_type: [Release]
-	hbb64: [ghcr.io/phusion/holy-build-box/hbb-64]
+	hbb64: [ 'ghcr.io/phusion/holy-build-box/hbb-64' ]
         include:
           - env:
             hbb64: "ghcr.io/phusion/holy-build-box/hbb-64"
