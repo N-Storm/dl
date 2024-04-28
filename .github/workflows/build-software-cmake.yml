@@ -21,8 +21,8 @@ jobs:
         sys:
           - { os: ubuntu-latest,  container: debian, shell: bash,        c_compiler: gcc, binary_orig: digilivolo, binary_target: digilivolo-linux-debian-x86_64 }
           - { os: ubuntu-latest,                     shell: bash,        c_compiler: gcc, binary_orig: digilivolo, binary_target: digilivolo-linux-ubuntu-x86_64 }
-          - { os: ubuntu-latest,  container: debian, shell: bash,        crosscompile: armhf, binary_orig: digilivolo, binary_target: digilivolo-linux-armhf }
-          - { os: ubuntu-latest,  container: debian, shell: bash,        crosscompile: arm64, binary_orig: digilivolo, binary_target: digilivolo-linux-arm64 }
+          - { os: ubuntu-latest,  container: debian:10, shell: bash,        crosscompile: armhf, binary_orig: digilivolo, binary_target: digilivolo-linux-armhf }
+          - { os: ubuntu-latest,  container: debian:10, shell: bash,        crosscompile: arm64, binary_orig: digilivolo, binary_target: digilivolo-linux-arm64 }
           - { os: ubuntu-latest,                     shell: bash,        c_compiler: clang, binary_orig: digilivolo, binary_target: digilivolo-clang64 }
           - { os: ubuntu-latest,  container: ghcr.io/phusion/holy-build-box/hbb-64, shell: bash, c_compiler: gcc, binary_orig: digilivolo, binary_target: digilivolo-hbb64 }
           - { os: windows-latest,                    shell: 'msys2 {0}', c_compiler: gcc, binary_orig: digilivolo.exe, binary_target: digilivolo-win-ucrt64.exe }
@@ -35,19 +35,8 @@ jobs:
         shell: ${{ matrix.sys.shell }}
 
     steps:
-#    - name: Install prereq packages on Debian container
-#      if: matrix.sys.container == 'debian'
-#      run: |
-#        apt update
-#        apt install -y sudo git dialog python3 python3-pip python3-setuptools curl wget
-#        apt -y full-upgrade
-#        git --version
-#        git config --global --add safe.directory /__w/dl/dl
-#        echo
-#        cat /etc/os-release
 
     - name: Install prereq packages on container
-#      if: matrix.sys.container == 'ghcr.io/phusion/holy-build-box/hbb-64'
       if: matrix.sys.container != ''
       run: |
         apt update || yum -y install https://packages.endpointdev.com/rhel/7/os/x86_64/endpoint-repo.x86_64.rpm
@@ -69,13 +58,7 @@ jobs:
       with:
         apt: libudev-dev sudo gcc cmake build-essential make sudo libusb-dev libc6-dev pkg-config file ninja-build clang
 
-#    - uses: actions/checkout@v4
-#      if: matrix.sys.container != 'ghcr.io/phusion/holy-build-box/hbb-64'
-#      with:
-#        submodules: 'recursive'
-
     - uses: actions/checkout@v3
-#      if: matrix.sys.container == 'ghcr.io/phusion/holy-build-box/hbb-64'
       with:
         submodules: 'recursive'
 
@@ -109,7 +92,6 @@ jobs:
 
     - name: Install Ninja
       if: matrix.sys.shell == 'pwsh'
-#      if: matrix.sys.shell != 'msys2 {0}'
       uses: turtlesec-no/get-ninja@main
 
     - name: 'Setup MSYS2'
@@ -128,7 +110,6 @@ jobs:
           ninja:p
 
     - name: Install toolchain
-#      if: ${{ matrix.sys.toolchain_file == 'arm-linux-gnueabihf-gcc-toolchain.cmake' }}
       if: ${{ matrix.sys.crosscompile != '' }}
       shell: bash
       run: |
@@ -173,5 +154,5 @@ jobs:
       with:
         fail_on_unmatched_files: false
         generate_release_notes: true        
-        make_latest: true
+#        make_latest: true
         files: software/build/${{ matrix.sys.binary_target }}
