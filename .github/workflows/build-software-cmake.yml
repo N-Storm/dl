@@ -147,7 +147,7 @@ jobs:
         -S software
       env:
         CMAKE_TOOLCHAIN_FILE_OPT: ${{ matrix.sys.crosscompile == '' && ' ' || format('-DCMAKE_TOOLCHAIN_FILE=cmake/{0}-linux-toolchain.cmake', matrix.sys.crosscompile) }}
-        CMAKE_C_COMPILER_OPT: ${{ matrix.sys.c_compiler == '' && ' ' || matrix.sys.c_compiler }}
+        CMAKE_C_COMPILER_OPT: ${{ matrix.sys.c_compiler == '' && ' ' || format('-CMAKE_C_COMPILER={0}', matrix.sys.c_compiler) }}
 
     - name: Build
       run: cmake --build software/build
