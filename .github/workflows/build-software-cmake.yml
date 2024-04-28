@@ -47,17 +47,10 @@ jobs:
         echo
         cat /etc/os-release
 
-    - uses: awalsh128/cache-apt-pkgs-action@latest
-#      if: matrix.sys.os == 'ubuntu-latest' && matrix.sys.container != 'ghcr.io/phusion/holy-build-box/hbb-64'
-      if: matrix.sys.os != 'windows-latest' && matrix.sys.container != 'ghcr.io/phusion/holy-build-box/hbb-64'
+    - uses: ConorMacBride/install-package@v1
+      if: matrix.sys.container != 'ghcr.io/phusion/holy-build-box/hbb-64'
       with:
-        packages: libudev-dev sudo gcc cmake build-essential make sudo libusb-dev libc6-dev pkg-config file ninja-build clang
-        version: 1.0
-
-#    - uses: ConorMacBride/install-package@v1
-#      if: matrix.sys.container != 'ghcr.io/phusion/holy-build-box/hbb-64'
-#      with:
-#        apt: libudev-dev sudo gcc cmake build-essential make sudo libusb-dev libc6-dev pkg-config file ninja-build clang
+        apt: libudev-dev sudo gcc cmake build-essential make sudo libusb-dev libc6-dev pkg-config file ninja-build clang
 
     - uses: actions/checkout@v3
       with:
