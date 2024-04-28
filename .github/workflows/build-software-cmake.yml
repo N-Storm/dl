@@ -5,6 +5,10 @@ on:
     # branches: [ main ]
     tags:
       - "v*.*.*"
+      inputs:
+        hbb64:
+          description: "ghcr.io/phusion/holy-build-box/hbb-64"
+          default: "ghcr.io/phusion/holy-build-box/hbb-64"
   # pull_request:
     # branches: [ main ]
     inputs:
