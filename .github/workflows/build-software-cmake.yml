@@ -21,8 +21,8 @@ jobs:
         sys:
           - { os: ubuntu-latest,  container: debian, shell: bash,        c_compiler: gcc, binary_orig: digilivolo, binary_target: digilivolo-linux-debian-x86_64 }
           - { os: ubuntu-latest,                     shell: bash,        c_compiler: gcc, binary_orig: digilivolo, binary_target: digilivolo-linux-ubuntu-x86_64 }
-          - { os: ubuntu-latest,  container: debian, shell: bash,        toolchain_file: arm-linux-gnueabihf-gcc-toolchain.cmake, binary_orig: digilivolo, binary_target: digilivolo-linux-armhf }
-          - { os: ubuntu-latest,  container: debian, shell: bash,        toolchain_file: aarch64-linux-gnu-gcc-toolchain.cmake, binary_orig: digilivolo, binary_target: digilivolo-linux-aarch64 }
+          - { os: ubuntu-latest,  container: debian, shell: bash,        crosscompile: armhf, binary_orig: digilivolo, binary_target: digilivolo-linux-armhf }
+          - { os: ubuntu-latest,  container: debian, shell: bash,        crosscompile: arm64, binary_orig: digilivolo, binary_target: digilivolo-linux-arm64 }
           - { os: ubuntu-latest,                     shell: bash,        c_compiler: clang, binary_orig: digilivolo, binary_target: digilivolo-clang64 }
           - { os: ubuntu-latest,  container: ghcr.io/phusion/holy-build-box/hbb-64, shell: bash, c_compiler: gcc, binary_orig: digilivolo, binary_target: digilivolo-hbb64 }
           - { os: windows-latest,                    shell: 'msys2 {0}', c_compiler: gcc, binary_orig: digilivolo.exe, binary_target: digilivolo-win-ucrt64.exe }
@@ -35,19 +35,20 @@ jobs:
         shell: ${{ matrix.sys.shell }}
 
     steps:
-    - name: Install prereq packages on Debian container
-      if: matrix.sys.container == 'debian'
-      run: |
-        apt update
-        apt install -y sudo git dialog python3 python3-pip python3-setuptools curl wget
-        apt -y full-upgrade
-        git --version
-        git config --global --add safe.directory /__w/dl/dl
-        echo
-        cat /etc/os-release
+#    - name: Install prereq packages on Debian container
+#      if: matrix.sys.container == 'debian'
+#      run: |
+#        apt update
+#        apt install -y sudo git dialog python3 python3-pip python3-setuptools curl wget
+#        apt -y full-upgrade
+#        git --version
+#        git config --global --add safe.directory /__w/dl/dl
+#        echo
+#        cat /etc/os-release
 
-    - name: Install prereq packages on HBB container
-      if: matrix.sys.container == 'ghcr.io/phusion/holy-build-box/hbb-64'
+    - name: Install prereq packages on container
+#      if: matrix.sys.container == 'ghcr.io/phusion/holy-build-box/hbb-64'
+      if: matrix.sys.container != ''
       run: |
         apt update || yum -y install https://packages.endpointdev.com/rhel/7/os/x86_64/endpoint-repo.x86_64.rpm
         apt -y full-upgrade || yum update -y
@@ -127,35 +128,26 @@ jobs:
           ninja:p
 
     - name: Install toolchain
-      if: ${{ matrix.sys.toolchain_file == 'arm-linux-gnueabihf-gcc-toolchain.cmake' }}
+#      if: ${{ matrix.sys.toolchain_file == 'arm-linux-gnueabihf-gcc-toolchain.cmake' }}
+      if: ${{ matrix.sys.crosscompile != '' }}
       shell: bash
       run: |
-        echo "Installing cross toolchain"
-        sudo dpkg --add-architecture armhf
+        echo "Installing cross toolchain for ${{ matrix.sys.crosscompile }}"
+        sudo dpkg --add-architecture ${{ matrix.sys.crosscompile }}
         sudo apt update
-        sudo apt install -y crossbuild-essential-armhf
-        sudo apt install -y libudev-dev:armhf libusb-dev:armhf libc6-dev:armhf pkg-config:armhf
-
-    - name: Install toolchain
-      if: ${{ matrix.sys.toolchain_file == 'aarch64-linux-gnu-gcc-toolchain.cmake' }}
-      shell: bash
-      run: |
-        echo "Installing cross toolchain"
-        sudo dpkg --add-architecture arm64
-        sudo apt update
-        sudo apt install -y crossbuild-essential-arm64
-        sudo apt install -y libudev-dev:arm64 libusb-dev:arm64 libc6-dev:arm64 pkg-config:arm64
+        sudo apt install -y crossbuild-essential-${{ matrix.sys.crosscompile }}
+        sudo apt install -y libudev-dev:${{ matrix.sys.crosscompile }} libusb-dev:${{ matrix.sys.crosscompile }} libc6-dev:${{ matrix.sys.crosscompile }} pkg-config:${{ matrix.sys.crosscompile }}
 
     - name: Configure CMake
       run: >
-        cmake -B software/build ${{ env.CMAKE_TOOLCHAIN_FILE_OPT }}
-        -DCMAKE_C_COMPILER=${{ matrix.sys.c_compiler }}
+        cmake -B software/build ${{ env.CMAKE_TOOLCHAIN_FILE_OPT }} ${{ env.CMAKE_C_COMPILER_OPT }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         -DUSE_SYSTEM_HIDAPI=false
         -G Ninja
         -S software
       env:
-        CMAKE_TOOLCHAIN_FILE_OPT: ${{ matrix.sys.toolchain_file == '' && ' ' || format('-DCMAKE_TOOLCHAIN_FILE=cmake/{0}', matrix.sys.toolchain_file) }}
+        CMAKE_TOOLCHAIN_FILE_OPT: ${{ matrix.sys.crosscompile == '' && ' ' || format('-DCMAKE_TOOLCHAIN_FILE=cmake/{0}-linux-toolchain.cmake', matrix.sys.crosscompile) }}
+        CMAKE_C_COMPILER_OPT: ${{ matrix.sys.c_compiler == '' && ' ' || matrix.sys.c_compiler }}
 
     - name: Build
       run: cmake --build software/build
