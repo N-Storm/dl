@@ -21,8 +21,8 @@ jobs:
         sys:
           - { os: ubuntu-latest,  container: 'debian:10', shell: bash,        c_compiler: gcc, binary_orig: digilivolo, binary_target: digilivolo-linux-debian-x86_64 }
           - { os: ubuntu-latest,                     shell: bash,        c_compiler: gcc, binary_orig: digilivolo, binary_target: digilivolo-linux-ubuntu-x86_64 }
-          - { os: ubuntu-latest,  container: 'debian:11', shell: bash,        crosscompile: armhf, binary_orig: digilivolo, binary_target: digilivolo-linux-armhf }
-          - { os: ubuntu-latest,  container: 'debian:11', shell: bash,        crosscompile: arm64, binary_orig: digilivolo, binary_target: digilivolo-linux-arm64 }
+          - { os: ubuntu-latest,  container: 'debian:12', shell: bash,        crosscompile: armhf, binary_orig: digilivolo, binary_target: digilivolo-linux-armhf }
+          - { os: ubuntu-latest,  container: 'debian:12', shell: bash,        crosscompile: arm64, binary_orig: digilivolo, binary_target: digilivolo-linux-arm64 }
           - { os: ubuntu-latest,                     shell: bash,        c_compiler: clang, binary_orig: digilivolo, binary_target: digilivolo-clang64 }
           - { os: ubuntu-latest,  container: ghcr.io/phusion/holy-build-box/hbb-64, shell: bash, c_compiler: gcc, binary_orig: digilivolo, binary_target: digilivolo-hbb64 }
           - { os: windows-latest,                    shell: 'msys2 {0}', c_compiler: gcc, binary_orig: digilivolo.exe, binary_target: digilivolo-win-ucrt64.exe }
