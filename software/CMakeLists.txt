@@ -33,7 +33,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 find_package(argp)
-message(STATUS "ARGP: ARGP_FOUND = ${ARGP_FOUND}, ARGP_LIBRARIES = ${ARGP_LIBRARIES}, ARGP_INCLUDE_PATH = ${ARGP_INCLUDE_PATH}")
+message(STATUS "DEBUG ARGP: ARGP_FOUND = ${ARGP_FOUND}, ARGP_LIBRARIES = ${ARGP_LIBRARIES}, ARGP_INCLUDE_PATH = ${ARGP_INCLUDE_PATH}")
 
 if(NOT ARGP_FOUND)
     add_subdirectory(lib/argp-standalone)
@@ -42,7 +42,7 @@ endif()
 
 if(USE_SYSTEM_HIDAPI)
     message(STATUS "Finding library hidapi")
-    find_package(HIDAPI 0.12 REQUIRED)
+    find_package(HIDAPI 0.13 REQUIRED)
     target_link_libraries(${PROJECT_NAME} HIDAPI::hidapi)
 else()
     add_subdirectory(lib/hidapi)
