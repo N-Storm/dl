@@ -23,8 +23,8 @@ jobs:
 
       matrix:
         sys:
-          - { os: ubuntu-latest, container: "${{ inputs.hbb64.default }}", shell: bash, c_compiler: gcc, binary_orig: digilivolo, binary_target: digilivolo-hbb64 }
-          - { os: ubuntu-latest, container: "$hbb64", shell: bash, c_compiler: gcc, binary_orig: digilivolo, binary_target: digilivolo-hbb64 }
+          - { os: ubuntu-latest, container: "${{ env.hbb64 }}", shell: bash, c_compiler: gcc, binary_orig: digilivolo, binary_target: digilivolo-hbb64 }
+          - { os: ubuntu-latest, container: "${{ hbb64 }}", shell: bash, c_compiler: gcc, binary_orig: digilivolo, binary_target: digilivolo-hbb64 }
 #          - { os: ubuntu-latest, container: 'debian:10', shell: bash       , c_compiler: gcc    , binary_orig: digilivolo    , binary_target: digilivolo-linux-debian-x86_64 }
 #          - { os: ubuntu-20.04                         , shell: bash       , c_compiler: gcc    , binary_orig: digilivolo    , binary_target: digilivolo-linux-ubuntu-x86_64 }
 #          - { os: ubuntu-latest, container: 'debian'   , shell: bash       , crosscompile: armhf, binary_orig: digilivolo    , binary_target: digilivolo-linux-armhf }
