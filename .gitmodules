@@ -1,4 +1,4 @@
-[submodule "lib/hidapi"]
+[submodule "software/lib/hidapi"]
 	path = software/lib/hidapi
 	url = https://github.com/libusb/hidapi.git
 [submodule "software/lib/argp-standalone"]
