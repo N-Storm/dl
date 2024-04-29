@@ -27,27 +27,32 @@ execute_process(
 
 message(STATUS "Project: ${PROJECT_NAME} ${GIT_VERSION}")
 
+configure_file(src/git_version.h.in src/git_version.h @ONLY)
+add_executable(${PROJECT_NAME} src/args.c src/digilivolo.c src/usb_func.c)
+target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/src")
+
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 find_package(argp)
 message(STATUS "ARGP: ARGP_FOUND = ${ARGP_FOUND}, ARGP_LIBRARIES = ${ARGP_LIBRARIES}, ARGP_INCLUDE_PATH = ${ARGP_INCLUDE_PATH}")
 
-if(NOT USE_SYSTEM_HIDAPI)
-    add_subdirectory(lib/hidapi)
-    message(STATUS "hidapi will be built from sources")
-else()
-    message(STATUS "Finding library hidapi")
-    find_package(hidapi 0.12 REQUIRED)
+if(NOT ARGP_FOUND)
+    add_subdirectory(lib/argp-standalone)
+    target_link_libraries(${PROJECT_NAME} argp-standalone)
 endif()
 
-message(STATUS "Using HIDAPI: ${hidapi_VERSION}")
+if(USE_SYSTEM_HIDAPI)
+    message(STATUS "Finding library hidapi")
+#    find_package(HIDAPI 0.12 REQUIRED COMPONENTS hidraw)
+    find_package(hidapi 0.12 REQUIRED)
+    target_link_libraries(${PROJECT_NAME} HIDAPI::hidapi)
+else()
+    add_subdirectory(lib/hidapi)
+    message(STATUS "hidapi will be built from sources")
+    target_link_libraries(${PROJECT_NAME} hidapi::hidapi)
+    message(STATUS "Using HIDAPI: ${hidapi_VERSION}")
+endif()
 
-add_subdirectory(lib/argp-standalone)
-
-configure_file(src/git_version.h.in src/git_version.h @ONLY)
-add_executable(${PROJECT_NAME} src/args.c src/digilivolo.c src/usb_func.c)
-target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/src")
-target_link_libraries(${PROJECT_NAME} hidapi::hidapi argp-standalone)
-# target_link_libraries(${PROJECT_NAME} hidapi::hidapi)
+# target_link_libraries(${PROJECT_NAME} HIDAPI::hidapi)
 
 # Strip binary for release builds
 add_custom_command(
