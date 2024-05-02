@@ -168,6 +168,7 @@ jobs:
     - name: Save packages to cached directory
       if: matrix.sys.os == 'ubuntu-20.04' && steps.cache-packages.outputs.cache-hit != 'true'
       run: |
+        mkdir ~/apt-cache
         sudo cp /var/cache/apt/archives/*.deb ~/apt-cache/
         sudo chown -R $USER ~/apt-cache
         sudo chmod o+r ~/apt-cache/*.deb
