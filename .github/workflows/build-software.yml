@@ -39,10 +39,15 @@ jobs:
       if: matrix.sys.os == 'ubuntu-20.04'
       uses: actions/cache@v4
       with:
-        path: /var/cache/apt
+        path: ~/apt-cache
+#        path: /var/cache/apt/archives
         key: ${{ runner.os }}-apt-cache
 #        restore-keys: |
 #          ${{ runner.os }}-apt-cache
+
+    - name: Copy packages from restored cache
+      if: matrix.sys.os == 'ubuntu-20.04' && steps.cache-packages.outputs.cache-hit == 'true'
+      run: sudo install ~/apt-cache/*.deb /var/cache/apt/archives
 
     - name: Install prereq packages on container
       if: matrix.sys.container != ''
@@ -159,3 +164,10 @@ jobs:
         generate_release_notes: true        
 #        make_latest: true
         files: software/build/${{ matrix.sys.binary_target }}
+
+    - name: Save packages to cached directory
+      if: matrix.sys.os == 'ubuntu-20.04' && steps.cache-packages.outputs.cache-hit != 'true'
+      run: |
+        sudo cp /var/cache/apt/archives/*.deb ~/apt-cache/
+        sudo chown -R $USER ~/apt-cache
+        sudo chmod o+r ~/apt-cache/*.deb
