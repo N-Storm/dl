@@ -35,6 +35,14 @@ jobs:
         shell: ${{ matrix.sys.shell }}
 
     steps:
+    - name: Cache packages
+      if: matrix.sys.os == 'ubuntu-20.04'
+      uses: actions/cache@v4
+      with:
+        path: /var/cache/apt
+        key: ${{ runner.os }}-apt-cache
+#        restore-keys: |
+#          ${{ runner.os }}-apt-cache
 
     - name: Install prereq packages on container
       if: matrix.sys.container != ''
