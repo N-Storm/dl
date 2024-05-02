@@ -172,3 +172,4 @@ jobs:
         sudo cp /var/cache/apt/archives/*.deb ~/apt-cache/
         sudo chown -R $USER ~/apt-cache
         sudo chmod o+r ~/apt-cache/*.deb
+        ls -l ~/apt-cache/
