@@ -58,7 +58,6 @@ jobs:
       uses: actions/checkout@v3
       with:
         submodules: 'recursive'
-      shell: alpine.sh {0}
 
     - name: Configure CMake project
       run: >
@@ -67,6 +66,8 @@ jobs:
         -DUSE_SYSTEM_HIDAPI=false
         -G Ninja
         -S software
+      shell: alpine.sh {0}
 
     - name: Build software
       run: cmake --build software/build
+      shell: alpine.sh {0}
