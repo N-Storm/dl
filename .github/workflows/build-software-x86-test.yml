@@ -23,10 +23,10 @@ jobs:
         arch: x86
         packages: |
           build-base
-          apt
+          sudo
 
     - name: Print OS info
-      run: cat /etc/alpine-release; cat /etc/os-release; uname -a
+      run: cat /etc/alpine-release; cat /etc/os-release; uname -a; id; sudo id
       shell: alpine.sh {0}
 
     - name: Install required prerequisite packages on the container and configure git
