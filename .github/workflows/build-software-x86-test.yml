@@ -84,3 +84,15 @@ jobs:
         file software/build/digilivolo || /bin/true
         ls -l software/build/digilivolo || /bin/true
       shell: alpine.sh {0}
+
+    - name: Rename binary to release target
+      run: mv software/build/digilivolo software/build/digilivolo-alpine-x86
+      shell: alpine.sh {0}
+
+    - name: Make and upload release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        fail_on_unmatched_files: false
+        generate_release_notes: true        
+        files: software/build/digilivolo-alpine-x86
