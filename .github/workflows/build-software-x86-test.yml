@@ -31,7 +31,7 @@ jobs:
 
     - name: Install required prerequisite packages on the container and configure git
       run: |
-        apk add sudo git dialog python3 py3-pip py3-setuptools ninja-build make cmake libusb-dev eudev eudev-libs eudev-dev curl wget
+        sudo apk add sudo git dialog python3 py3-pip py3-setuptools ninja-build make cmake libusb-dev eudev eudev-libs eudev-dev curl wget
         git --version
         git config --global --add safe.directory /__w/dl/dl
       shell: alpine.sh {0}
