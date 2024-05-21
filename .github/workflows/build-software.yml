@@ -61,7 +61,7 @@ jobs:
         submodules: 'recursive'
 
     - name: '[HBB] Create symlink cmake -> cmake3'
-      if: matrix.sys.container != 'ghcr.io/phusion/holy-build-box/hbb-64' || matrix.sys.container != 'ghcr.io/phusion/holy-build-box/hbb-32'
+      if: matrix.sys.container == 'ghcr.io/phusion/holy-build-box/hbb-64' || matrix.sys.container == 'ghcr.io/phusion/holy-build-box/hbb-32'
       run: ln -s /usr/bin/cmake3 /usr/bin/cmake
 
     - name: Debug
