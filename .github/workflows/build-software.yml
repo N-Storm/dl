@@ -21,7 +21,7 @@ jobs:
       matrix:
         sys:
           - { os: ubuntu-latest, container: 'ghcr.io/phusion/holy-build-box/hbb-64', shell: bash       , c_compiler: gcc    , binary_orig: digilivolo }
-#          - { os: ubuntu-latest, container: 'ghcr.io/phusion/holy-build-box/hbb-32', shell: bash       , c_compiler: gcc    , binary_orig: digilivolo    , binary_release: digilivolo-linux-i686 }
+          - { os: ubuntu-latest, container: 'ghcr.io/phusion/holy-build-box/hbb-32', shell: bash       , c_compiler: gcc    , binary_orig: digilivolo    , binary_release: digilivolo-linux-i386 }
           - { os: ubuntu-latest, container: 'debian:10'                            , shell: bash       , c_compiler: gcc    , binary_orig: digilivolo }
           - { os: ubuntu-20.04                                                     , shell: bash       , c_compiler: gcc    , binary_orig: digilivolo    , binary_release: digilivolo-linux-x86_64 }
           - { os: ubuntu-latest, container: 'debian'                               , shell: bash       , crosscompile: armhf, binary_orig: digilivolo    , binary_release: digilivolo-linux-armhf }
@@ -41,7 +41,7 @@ jobs:
     - name: Install required prerequisite packages on the container and configure git
       if: matrix.sys.container != ''
       run: |
-        apt update || yum -y install https://packages.endpointdev.com/rhel/7/os/x86_64/endpoint-repo.x86_64.rpm
+        apt update || yum -y install https://packages.endpointdev.com/rhel/7/os/x86_64/endpoint-repo.x86_64.rpm || echo "WARN: Endpoint repo add failed!"
         apt -y full-upgrade || yum update -y
         apt install -y sudo git dialog python3 python3-pip python3-setuptools curl wget || yum install -y sudo git dialog python3 python3-pip python3-setuptools ninja-build make cmake3 libusb-devel libudev-devel curl wget
         git --version
