@@ -49,7 +49,7 @@ jobs:
 
     - name: Install required prerequisite packages on the container and configure git
       run: |
-        sudo apk add git dialog python3 py3-pip py3-setuptools ninja-build samurai make cmake libusb-dev eudev eudev-libs eudev-dev curl wget pkgconf-dev pkgconf linux-headers
+        sudo apk add git dialog python3 py3-pip py3-setuptools ninja-build samurai make cmake libusb-dev eudev eudev-libs eudev-dev curl wget pkgconf-dev pkgconf linux-headers argp-standalone
         git --version
         git config --global --add safe.directory /__w/dl/dl
       shell: alpine.sh {0}
@@ -70,4 +70,17 @@ jobs:
 
     - name: Build software
       run: cmake --build software/build
+      shell: alpine.sh {0}
+
+    - name: Print some info on compiled binary
+      run: |
+        echo "=== objdump -x ==="
+        objdump -x software/build/digilivolo || /bin/true
+        echo "=== size -A ==="
+        size -A software/build/digilivolo || /bin/true
+        echo "=== ldd -v ==="
+        ldd -v software/build/digilivolo || /bin/true
+        echo "=== file & ls ==="
+        file software/build/digilivolo || /bin/true
+        ls -l software/build/digilivolo || /bin/true
       shell: alpine.sh {0}
