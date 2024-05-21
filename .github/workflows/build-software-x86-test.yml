@@ -79,7 +79,7 @@ jobs:
         echo "=== size -A ==="
         size -A software/build/digilivolo || /bin/true
         echo "=== ldd -v ==="
-        ldd -v software/build/digilivolo || /bin/true
+        ldd software/build/digilivolo || /bin/true
         echo "=== file & ls ==="
         file software/build/digilivolo || /bin/true
         ls -l software/build/digilivolo || /bin/true
