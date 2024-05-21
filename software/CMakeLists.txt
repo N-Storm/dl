@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 set(PROJECT_NAME "digilivolo")
 project(${PROJECT_NAME} C)
 
+# if("${CMAKE_TOOLCHAIN_FILE}" STREQUAL "GNU")
+set(CMAKE_PROJECT_INCLUDE "@TOOLCHAIN_FILE_PATH@")
+
 option(USE_SYSTEM_HIDAPI "Don't build included hidapi, use system installed version instead" FALSE)
 option(HIDAPI_WITH_LIBUSB "Build hidapi with libusb interface" FALSE)
 option(BUILD_SHARED_LIBS "Link target & deps dynamically where possible" FALSE)
