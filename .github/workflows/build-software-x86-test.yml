@@ -53,3 +53,20 @@ jobs:
         git --version
         git config --global --add safe.directory /__w/dl/dl
       shell: alpine.sh {0}
+
+    - name: Checkout repo
+      uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
+      shell: alpine.sh {0}
+
+    - name: Configure CMake project
+      run: >
+        cmake -B software/build 
+        -DCMAKE_BUILD_TYPE=Release
+        -DUSE_SYSTEM_HIDAPI=false
+        -G Ninja
+        -S software
+
+    - name: Build software
+      run: cmake --build software/build
