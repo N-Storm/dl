@@ -1,9 +1,29 @@
+/* Part of the DigiLivolo firmware.
+ * https://github.com/N-Storm/DigiLivolo/ 
+ * Copyright (c) 2024 GitHub user N-Storm.
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but 
+ * WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License 
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #include <Arduino.h>
 #include <DLUSB.h>
-#include <Livolo.h>
+#include <DLTransmitter.h>
 #include <stdint.h>
 
-Livolo livolo(PIN_B5); // Transmitter connected to pin #5
+DLTransmitter DLTransmitter(PIN_B5); // Transmitter connected to pin #5
 dlusb_packet_t in_buf, out_buf; // Input & outpus USB packet buffers
 
 /// @brief Populates dlusb_packet_t struct with RDY packet which are sent
@@ -17,6 +37,10 @@ void mk_rdy_packet(dlusb_packet_t* packet) {
   // Just some unused "magic" data to test connection below.
   packet->remote_id = 0xABCD;
   packet->btn_id = 0xEF;
+}
+
+void DLUSB_refresh_wrapper() {
+  DLUSB.refresh();
 }
 
 void setup() {
@@ -34,6 +58,8 @@ void setup() {
 }
 
 void loop() {
+  DLUSB.refresh();
+
   // Read data from host if available.
   if (DLUSB.available()) {
     // Turn on the LED to indicate received packet.
@@ -41,17 +67,31 @@ void loop() {
 
     if (DLUSB.read(&in_buf)) {
       DLUSB.refresh();
-      // Transmit Livolo code
-      livolo.sendButton(in_buf.remote_id, in_buf.btn_id);
-      DLUSB.refresh();
-      /* Send back same packet so that the host software can acknowledge it was
-       * processed by the device. */
-      DLUSB.write(&in_buf);
+
+      if (in_buf.cmd_id == CMD_SWITCH || in_buf.cmd_id == CMD_SWITCH_OLD) {
+        // Transmit Livolo code
+        if (in_buf.cmd_id == CMD_SWITCH) // New method
+          DLTransmitter.sendButton(in_buf.remote_id, in_buf.btn_id, true, &DLUSB_refresh_wrapper);
+        else if (in_buf.cmd_id == CMD_SWITCH_OLD) // Old method
+          DLTransmitter.sendButton(in_buf.remote_id, in_buf.btn_id);
+
+        DLUSB.refresh();
+        
+        /* Send back same packet so that the host software can acknowledge it was
+         * processed by the device. */
+        DLUSB.write(&in_buf);
+      }
+      else {
+        memcpy(&out_buf, &in_buf, sizeof(in_buf));
+        out_buf.cmd_id = CMD_ERR_UNKNOWN;
+        DLUSB.write(&out_buf);
+      }
+      
       /* Sleep for 100ms after receiving packet & transmitting the keycode. We
        * don't need to send codes more often. Makes LED blink noticable. */
       DLUSB.delay(100);
-      digitalWrite(LED_BUILTIN, LOW); // LED off
     }
+    digitalWrite(LED_BUILTIN, LOW); // LED off
   }
 
   // Sleep for 50ms between checking for packets from the host.

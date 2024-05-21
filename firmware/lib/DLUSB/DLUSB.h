@@ -1,9 +1,15 @@
-/*
+/* Name: DLUSB.h
+ * Part of the DigiLivolo firmware.
+ * https://github.com/N-Storm/DigiLivolo/ 
+ * Copyright (c) 2024 GitHub user N-Storm.
+ * 
  * Based on DigiUSB library from Digistump Arduino: https://github.com/ArminJo/DigistumpArduino
- * Based on Obdev's AVRUSB code and under the same license.
+ * Based on Obdev's AVRUSB code.
  *
- * TODO: Make a proper file header. :-)
+ * License: GNU GPL v3 or later
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
+
 #ifndef __DLUSB_h__
 #define __DLUSB_h__
 
@@ -12,25 +18,13 @@
 #include <string.h>
 #include <stdint.h>
 #include "usbdrv.h"
+#include "defs.h"
 
 #include <util/delay.h> /* for _delay_ms() */
 
 /* Buffer size for USB TX & RX buffers. This is not the bytes, it's a count of dlusb_packet_t
  * structures it holds. I.e. how many packets it can store before processing. */
 #define RING_BUFFER_SIZE 16
-
-#define REPORT_ID 0x4c
-
-#define CMD_SWITCH 0x01 // IN,OUT send Livolo keycode command or send ACK to the host
-#define CMD_RDY 0x10 // OUT, device ready command
-#define CMD_FAIL_BIT (uint8_t)(1 << 7) // Not used
-
-typedef struct dlusb_packet {
-  uint8_t report_id;
-  uint8_t cmd_id;
-  uint16_t remote_id;
-  uint8_t btn_id;
-} dlusb_packet_t;
 
 struct ring_buffer {
   dlusb_packet_t buffer[RING_BUFFER_SIZE];

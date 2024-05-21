@@ -1,4 +1,8 @@
 /* Name: DLUSB.c
+ * Part of the DigiLivolo firmware.
+ * https://github.com/N-Storm/DigiLivolo/ 
+ * Copyright (c) 2024 GitHub user N-Storm.
+ * 
  * Based on DLUSB library from Digistump Arduino: https://github.com/ArminJo/DigistumpArduino
  * Based on V-USB Arduino Examples by Philip J. Lindsay
  * Modification for the Digispark by Erik Kettenburg, Digistump LLC
@@ -9,11 +13,11 @@
  * Original author: Christian Starkjohann
  * Arduino modifications by: Philip J. Lindsay
  * Creation Date: 2008-04-11
- * Tabsize: 4
  * Copyright: (c) 2008 by OBJECTIVE DEVELOPMENT Software GmbH
- * License: GNU GPL v2 (see License.txt), GNU GPL v3 or proprietary (CommercialLicense.txt)
- * This Revision: $Id: main.c 692 2008-11-07 15:07:40Z cs $
+ * License: GNU GPL v3 or later
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
+
 #include <Arduino.h>
 #include <avr/io.h>
 #include <avr/wdt.h>
@@ -24,6 +28,7 @@
 #include "usbdrv.h"
 #include "oddebug.h"        // This is also an example for using debug macros
 
+#include "defs.h"
 #include "DLUSB.h"
 
 /* Ring buffer implementation nicked from HardwareSerial.cpp
@@ -201,7 +206,7 @@ extern "C" {
     // Type cast incoming data to dlusb_packet_t struct
     dlusb_packet_t* p = (dlusb_packet_t*)data;
     // TODO: Check why len are not <= sizeof(dlusb_packet_t)
-    if (p->report_id == REPORT_ID && p->cmd_id == CMD_SWITCH)
+    if (p->report_id == REPORT_ID && (p->cmd_id == CMD_SWITCH || p->cmd_id == CMD_SWITCH_OLD) )
       if (!store_packet(p, &rx_buffer))
         return 0xff; // Return FAIL code
 
