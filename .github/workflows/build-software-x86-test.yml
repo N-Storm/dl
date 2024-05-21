@@ -62,6 +62,7 @@ jobs:
     - name: Configure CMake project
       run: >
         cmake -B software/build 
+        -DCMAKE_TOOLCHAIN_FILE=cmake/i386-linux-toolchain.cmake
         -DCMAKE_BUILD_TYPE=Release
         -DUSE_SYSTEM_HIDAPI=false
         -G Ninja
