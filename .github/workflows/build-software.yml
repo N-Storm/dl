@@ -2,11 +2,12 @@ name: Build DigiLivolo software
 
 on:
   push:
-    # branches: [ main ]
+    branches: [ main, dev ]
     tags:
-      - "v*.*.*"
-  # pull_request:
-    # branches: [ main ]
+      - "v[0-9]+.[0-9]+.[0-9]+"
+  pull_request:
+    branches: [ main, dev ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -19,15 +20,15 @@ jobs:
 
       matrix:
         sys:
-          - { os: ubuntu-latest                        , shell: bash       , c_compiler: gcc    , binary_orig: digilivolo    , binary_target: digilivolo-hbb64, container: 'ghcr.io/phusion/holy-build-box/hbb-64' }
-          - { os: ubuntu-latest, container: 'debian:10', shell: bash       , c_compiler: gcc    , binary_orig: digilivolo    , binary_target: digilivolo-linux-debian-x86_64 }
-          - { os: ubuntu-20.04                         , shell: bash       , c_compiler: gcc    , binary_orig: digilivolo    , binary_target: digilivolo-linux-ubuntu-x86_64 }
-          - { os: ubuntu-latest, container: 'debian'   , shell: bash       , crosscompile: armhf, binary_orig: digilivolo    , binary_target: digilivolo-linux-armhf }
-          - { os: ubuntu-latest, container: 'debian'   , shell: bash       , crosscompile: arm64, binary_orig: digilivolo    , binary_target: digilivolo-linux-arm64 }
-          - { os: ubuntu-20.04                         , shell: bash       , c_compiler: clang  , binary_orig: digilivolo    , binary_target: digilivolo-clang64 }
-          - { os: windows-latest                       , shell: 'msys2 {0}', c_compiler: gcc    , binary_orig: digilivolo.exe, binary_target: digilivolo-win-ucrt64.exe }
-          - { os: windows-latest                       , shell: pwsh       , c_compiler: gcc    , binary_orig: digilivolo.exe, binary_target: digilivolo-win-x86_64.exe }
-          - { os: windows-latest                       , shell: pwsh       , c_compiler: clang  , binary_orig: digilivolo.exe, binary_target: digilivolo-win-clang64.exe }
+          - { os: ubuntu-latest, container: 'ghcr.io/phusion/holy-build-box/hbb-64', shell: bash       , c_compiler: gcc    , binary_orig: digilivolo }
+          - { os: ubuntu-latest, container: 'debian:10'                            , shell: bash       , c_compiler: gcc    , binary_orig: digilivolo }
+          - { os: ubuntu-20.04                                                     , shell: bash       , c_compiler: gcc    , binary_orig: digilivolo    , binary_release: digilivolo-linux-x86_64 }
+          - { os: ubuntu-latest, container: 'debian'                               , shell: bash       , crosscompile: armhf, binary_orig: digilivolo    , binary_release: digilivolo-linux-armhf }
+          - { os: ubuntu-latest, container: 'debian'                               , shell: bash       , crosscompile: arm64, binary_orig: digilivolo    , binary_release: digilivolo-linux-arm64 }
+          - { os: ubuntu-20.04                                                     , shell: bash       , c_compiler: clang  , binary_orig: digilivolo }
+          - { os: windows-latest                                                   , shell: 'msys2 {0}', c_compiler: gcc    , binary_orig: digilivolo.exe, binary_release: digilivolo-win-x86_64.exe }
+          - { os: windows-latest                                                   , shell: pwsh       , c_compiler: gcc    , binary_orig: digilivolo.exe }
+          - { os: windows-latest                                                   , shell: pwsh       , c_compiler: clang  , binary_orig: digilivolo.exe }
         build_type: [Release]
 
     defaults:
@@ -35,21 +36,8 @@ jobs:
         shell: ${{ matrix.sys.shell }}
 
     steps:
-    - name: Cache packages
-      if: matrix.sys.os == 'ubuntu-20.04'
-      uses: actions/cache@v4
-      with:
-        path: ~/apt-cache
-#        path: /var/cache/apt/archives
-        key: ${{ runner.os }}-apt-cache
-#        restore-keys: |
-#          ${{ runner.os }}-apt-cache
 
-    - name: Copy packages from restored cache
-      if: matrix.sys.os == 'ubuntu-20.04' && steps.cache-packages.outputs.cache-hit == 'true'
-      run: sudo install ~/apt-cache/*.deb /var/cache/apt/archives
-
-    - name: Install prereq packages on container
+    - name: Install required prerequisite packages on the container and configure git
       if: matrix.sys.container != ''
       run: |
         apt update || yum -y install https://packages.endpointdev.com/rhel/7/os/x86_64/endpoint-repo.x86_64.rpm
@@ -60,12 +48,14 @@ jobs:
         echo
         cat /etc/os-release
 
-    - uses: ConorMacBride/install-package@v1
+    - name: Install packages required for the workflow and build deps
+      uses: ConorMacBride/install-package@v1
       if: matrix.sys.container != 'ghcr.io/phusion/holy-build-box/hbb-64'
       with:
         apt: libudev-dev sudo gcc cmake build-essential make sudo libusb-dev libc6-dev pkg-config file ninja-build clang
 
-    - uses: actions/checkout@v3
+    - name: Checkout repo
+      uses: actions/checkout@v3
       with:
         submodules: 'recursive'
 
@@ -98,7 +88,7 @@ jobs:
       if: matrix.sys.shell == 'pwsh'
       uses: turtlesec-no/get-ninja@main
 
-    - name: 'Setup MSYS2'
+    - name: Setup MSYS2 UCRT64
       if: matrix.sys.shell == 'msys2 {0}'
       uses: msys2/setup-msys2@v2
       with:
@@ -113,7 +103,7 @@ jobs:
           cmake:p
           ninja:p
 
-    - name: Install toolchain
+    - name: Install cross compiling toolchain and deps
       if: ${{ matrix.sys.crosscompile != '' }}
       shell: bash
       run: |
@@ -123,7 +113,7 @@ jobs:
         sudo apt install -y crossbuild-essential-${{ matrix.sys.crosscompile }}
         sudo apt install -y libudev-dev:${{ matrix.sys.crosscompile }} libusb-dev:${{ matrix.sys.crosscompile }} libc6-dev:${{ matrix.sys.crosscompile }} pkg-config:${{ matrix.sys.crosscompile }}
 
-    - name: Configure CMake
+    - name: Configure CMake project
       run: >
         cmake -B software/build ${{ env.CMAKE_TOOLCHAIN_FILE_OPT }} ${{ env.CMAKE_C_COMPILER_OPT }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
@@ -134,10 +124,10 @@ jobs:
         CMAKE_TOOLCHAIN_FILE_OPT: ${{ matrix.sys.crosscompile == '' && ' ' || format('-DCMAKE_TOOLCHAIN_FILE=cmake/{0}-linux-toolchain.cmake', matrix.sys.crosscompile) }}
         CMAKE_C_COMPILER_OPT: ${{ matrix.sys.c_compiler == '' && ' ' || format('-DCMAKE_C_COMPILER={0}', matrix.sys.c_compiler) }}
 
-    - name: Build
+    - name: Build software
       run: cmake --build software/build
 
-    - name: Print info on compiled binary
+    - name: Print some info on compiled binary
       shell: bash
       run: |
         echo "=== objdump -x ==="
@@ -150,26 +140,16 @@ jobs:
         file software/build/${{ matrix.sys.binary_orig }} || /bin/true
         ls -l software/build/${{ matrix.sys.binary_orig }} || /bin/true
 
-    - name: Rename binary
-      if: ${{ matrix.sys.binary_target != '' }}
+    - name: Rename binary to release target
+      if: ${{ matrix.sys.binary_release != '' }}
       shell: bash
       run: |
-        mv software/build/${{ matrix.sys.binary_orig }} software/build/${{ matrix.sys.binary_target }}
+        mv software/build/${{ matrix.sys.binary_orig }} software/build/${{ matrix.sys.binary_release }}
 
     - name: Make and upload release
       uses: softprops/action-gh-release@v1
-      if: startsWith(github.ref, 'refs/tags/') && matrix.sys.binary_target != ''
+      if: startsWith(github.ref, 'refs/tags/') && matrix.sys.binary_release != ''
       with:
         fail_on_unmatched_files: false
         generate_release_notes: true        
-#        make_latest: true
-        files: software/build/${{ matrix.sys.binary_target }}
-
-    - name: Save packages to cached directory
-      if: matrix.sys.os == 'ubuntu-20.04' && steps.cache-packages.outputs.cache-hit != 'true'
-      run: |
-        mkdir ~/apt-cache
-        sudo cp /var/cache/apt/archives/*.deb ~/apt-cache/
-        sudo chown -R $USER ~/apt-cache
-        sudo chmod o+r ~/apt-cache/*.deb
-        ls -l ~/apt-cache/
+        files: software/build/${{ matrix.sys.binary_release }}
