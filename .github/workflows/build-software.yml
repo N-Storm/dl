@@ -1,4 +1,4 @@
-name: Build DigiLivolo software
+name: Build DigiLivolo software (old)
 
 on:
   push:
@@ -20,8 +20,8 @@ jobs:
 
       matrix:
         sys:
-          - { os: ubuntu-latest, container: 'ghcr.io/phusion/holy-build-box/hbb-64', shell: bash       , c_compiler: gcc    , binary_orig: digilivolo }
-          - { os: ubuntu-latest, container: 'ghcr.io/phusion/holy-build-box/hbb-32', shell: bash       , c_compiler: gcc    , binary_orig: digilivolo    , binary_release: digilivolo-linux-i386 }
+#          - { os: ubuntu-latest, container: 'ghcr.io/phusion/holy-build-box/hbb-64', shell: bash       , c_compiler: gcc    , binary_orig: digilivolo }
+#          - { os: ubuntu-latest, container: 'ghcr.io/phusion/holy-build-box/hbb-32', shell: bash       , c_compiler: gcc    , binary_orig: digilivolo    , binary_release: digilivolo-linux-i386 }
 #          - { os: ubuntu-latest, container: 'debian:10'                            , shell: bash       , c_compiler: gcc    , binary_orig: digilivolo }
           - { os: ubuntu-20.04                                                     , shell: bash       , c_compiler: gcc    , binary_orig: digilivolo    , binary_release: digilivolo-linux-x86_64 }
 #          - { os: ubuntu-latest, container: 'debian'                               , shell: bash       , crosscompile: armhf, binary_orig: digilivolo    , binary_release: digilivolo-linux-armhf }
@@ -37,6 +37,8 @@ jobs:
         shell: ${{ matrix.sys.shell }}
 
     steps:
+    - name: Fail workflow, temporary disabled
+      run: /bin/false
 
     - name: Install required prerequisite packages on the container and configure git
       if: matrix.sys.container != ''
