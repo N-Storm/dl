@@ -30,7 +30,9 @@ jobs:
 #          - { os: windows-latest                                                   , shell: 'msys2 {0}'    , c_compiler: gcc    , binary_orig: digilivolo.exe, binary_release: digilivolo-win-x86_64.exe }
 #          - { os: windows-latest                                                   , shell: pwsh           , c_compiler: gcc    , binary_orig: digilivolo.exe }
 #          - { os: windows-latest                                                   , shell: pwsh           , c_compiler: clang  , binary_orig: digilivolo.exe }
-          - { os: macos-latest                                                      , shell: bash           , c_compiler: gcc    , binary_orig: digilivolo }
+          - { os: macos-latest                                                      , shell: bash           , c_compiler: gcc    , binary_orig: digilivolo, binary_release: digilivolo-macos-latest }
+          - { os: macos-13                                                      , shell: bash           , c_compiler: gcc    , binary_orig: digilivolo, binary_release: digilivolo-macos-13 }
+          - { os: macos-11                                                      , shell: bash           , c_compiler: gcc    , binary_orig: digilivolo, binary_release: digilivolo-macos-11 }
         build_type: [Release]
 
     defaults:
