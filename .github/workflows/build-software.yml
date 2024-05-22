@@ -34,7 +34,6 @@ jobs:
           - { os: macos-14-xlarge                                                  , shell: bash           , c_compiler: gcc    , binary_orig: digilivolo, binary_release: digilivolo-macos-14-arm64 }
           - { os: macos-13                                                         , shell: bash           , c_compiler: gcc    , binary_orig: digilivolo, binary_release: digilivolo-macos-13-x86_64 }
           - { os: macos-13-xlarge                                                  , shell: bash           , c_compiler: gcc    , binary_orig: digilivolo, binary_release: digilivolo-macos-13-x86_64 }
-          - { os: macos-12                                                         , shell: bash           , c_compiler: gcc    , binary_orig: digilivolo, binary_release: digilivolo-macos-11 }
         build_type: [Release]
 
     defaults:
