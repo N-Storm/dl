@@ -106,6 +106,8 @@ jobs:
         echo "CMAKE_TOOLCHAIN_FILE_OPT: $CMAKE_TOOLCHAIN_FILE_OPT"
         echo "MY_ENV_VAR2: $MY_ENV_VAR2"
         echo "MY_ENV_VAR3: $MY_ENV_VAR3"
+        gcc --version
+        which gcc
       env:
         CMAKE_TOOLCHAIN_FILE_OPT: ${{ matrix.sys.toolchain_file == '' && ' ' || format('-DCMAKE_TOOLCHAIN_FILE=cmake/{0}', matrix.sys.toolchain_file) }}
 #        MY_ENV_VAR2: matrix.sys.toolchain_file == '' && 'EMPTY' || "-DCMAKE_TOOLCHAIN_FILE=software/cmake/${{matrix.sys.toolchain_file}}"
@@ -159,14 +161,14 @@ jobs:
       shell: bash
       run: |
         echo "=== objdump -x ==="
-        objdump -x software/build/${{ matrix.sys.binary_orig }} || /bin/true
+        objdump -x software/build/${{ matrix.sys.binary_orig }} || /bin/true || /usr/bin/true || echo
         echo "=== size -A ==="
-        size -A software/build/${{ matrix.sys.binary_orig }} || /bin/true
+        size -A software/build/${{ matrix.sys.binary_orig }} || /bin/true || /usr/bin/true || echo
         echo "=== ldd -v ==="
-        ldd -v software/build/${{ matrix.sys.binary_orig }} || /bin/true
+        ldd -v software/build/${{ matrix.sys.binary_orig }} || /bin/true || /usr/bin/true || echo
         echo "=== file & ls ==="
-        file software/build/${{ matrix.sys.binary_orig }} || /bin/true
-        ls -l software/build/${{ matrix.sys.binary_orig }} || /bin/true
+        file software/build/${{ matrix.sys.binary_orig }} || /bin/true || /usr/bin/true || echo
+        ls -l software/build/${{ matrix.sys.binary_orig }} || /bin/true || /usr/bin/true || echo
 
     - name: Rename binary to release target
       if: ${{ matrix.sys.binary_release != '' }}
