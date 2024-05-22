@@ -22,7 +22,7 @@ jobs:
         sys:
 #          - { os: ubuntu-latest, container: 'ghcr.io/phusion/holy-build-box/hbb-64', shell: bash           , c_compiler: gcc    , binary_orig: digilivolo }
 #          - { os: ubuntu-latest, container: 'debian:10'                            , shell: bash           , c_compiler: gcc    , binary_orig: digilivolo }
-#          - { os: ubuntu-20.04                                                     , shell: bash           , c_compiler: gcc    , binary_orig: digilivolo    , binary_release: digilivolo-linux-x86_64 }
+          - { os: ubuntu-20.04                                                     , shell: bash           , c_compiler: gcc    , binary_orig: digilivolo    , binary_release: digilivolo-linux-x86_64 }
 #          - { os: ubuntu-latest                                                    , shell: 'alpine.sh {0}', crosscompile: i386 , binary_orig: digilivolo    , binary_release: digilivolo-linux-static-i386 }
 #          - { os: ubuntu-latest, container: 'debian'                               , shell: bash           , crosscompile: armhf, binary_orig: digilivolo    , binary_release: digilivolo-linux-armhf }
 #          - { os: ubuntu-latest, container: 'debian'                               , shell: bash           , crosscompile: arm64, binary_orig: digilivolo    , binary_release: digilivolo-linux-arm64 }
@@ -30,10 +30,10 @@ jobs:
 #          - { os: windows-latest                                                   , shell: 'msys2 {0}'    , c_compiler: gcc    , binary_orig: digilivolo.exe, binary_release: digilivolo-win-x86_64.exe }
 #          - { os: windows-latest                                                   , shell: pwsh           , c_compiler: gcc    , binary_orig: digilivolo.exe }
 #          - { os: windows-latest                                                   , shell: pwsh           , c_compiler: clang  , binary_orig: digilivolo.exe }
-#          - { os: macos-14-large                                                   , shell: bash           , c_compiler: gcc    , binary_orig: digilivolo, binary_release: digilivolo-macos-14-x86_64 }
-#          - { os: macos-14-xlarge                                                  , shell: bash           , c_compiler: gcc    , binary_orig: digilivolo, binary_release: digilivolo-macos-14-arm64 }
+          - { os: macos-14-large                                                   , shell: bash           , c_compiler: gcc    , binary_orig: digilivolo, binary_release: digilivolo-macos-14-x86_64 }
+          - { os: macos-14-xlarge                                                  , shell: bash           , c_compiler: gcc    , binary_orig: digilivolo, binary_release: digilivolo-macos-14-arm64 }
           - { os: macos-13                                                         , shell: bash           , c_compiler: gcc    , binary_orig: digilivolo, binary_release: digilivolo-macos-13-x86_64 }
-#          - { os: macos-13-xlarge                                                  , shell: bash           , c_compiler: gcc    , binary_orig: digilivolo, binary_release: digilivolo-macos-13-x86_64 }
+          - { os: macos-13-xlarge                                                  , shell: bash           , c_compiler: gcc    , binary_orig: digilivolo, binary_release: digilivolo-macos-13-x86_64 }
         build_type: [Release]
 
     defaults:
