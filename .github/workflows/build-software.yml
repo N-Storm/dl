@@ -79,7 +79,7 @@ jobs:
       uses: ConorMacBride/install-package@v1
       if: matrix.sys.container != 'ghcr.io/phusion/holy-build-box/hbb-64'
       with:
-        apt: libudev-dev sudo gcc cmake build-essential make libc6-dev pkg-config file ninja-build clang
+        apt: build-essential clang cmake file gcc libc6-dev libudev-dev make ninja-build pkg-config sudo
         brew: ninja
 
     - name: Checkout repo
