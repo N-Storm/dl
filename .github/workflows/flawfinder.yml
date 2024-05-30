@@ -25,8 +25,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          submodules: 'recursive'
+#        with:
+#          submodules: 'recursive'
+
+      - name: Remove 3rd party extras
+        run: rm -rf firmware/packages
 
       - name: flawfinder_scan
         uses: david-a-wheeler/flawfinder@8e4a779ad59dbfaee5da586aa9210853b701959c
