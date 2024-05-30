@@ -7,9 +7,6 @@ option(USE_SYSTEM_HIDAPI "Don't build included hidapi, use system installed vers
 option(HIDAPI_WITH_LIBUSB "Build hidapi with libusb interface" FALSE)
 option(BUILD_SHARED_LIBS "Link target & deps dynamically where possible" FALSE)
 
-# set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
-# set(CMAKE_EXE_LINKER_FLAGS "-static")
-
 if("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
   set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3 -std=gnu11 -flto -ffunction-sections -fdata-sections -ffat-lto-objects -Wall -Wl,--warn-common -Wl,--gc-sections")
   set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Og -std=gnu11 -Wall -Wl,--warn-common")

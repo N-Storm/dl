@@ -52,31 +52,12 @@ jobs:
         echo
         cat /etc/os-release
 
-    - uses: jirutka/setup-alpine@v1
+    - name: Install & configure Alpine Linux build environment for i386 build
+      uses: jirutka/setup-alpine@v1
       if: matrix.sys.crosscompile == 'i386'
       with:
         arch: x86
-        packages: |
-          build-base
-          sudo
-          git
-          dialog
-          python3
-          py3-pip
-          py3-setuptools
-          ninja-build
-          samurai
-          make
-          cmake
-          libusb-dev
-          eudev
-          eudev-libs
-          eudev-dev
-          curl
-          wget
-          pkgconf
-          pkgconf-dev
-          linux-headers
+        packages: build-base cmake curl dialog eudev eudev-dev eudev-libs git libusb-dev linux-headers make ninja-build pkgconf pkgconf-dev py3-pip py3-setuptools python3 samurai sudo wget
 
     - name: Install packages required for the workflow and build deps
       uses: ConorMacBride/install-package@v1
