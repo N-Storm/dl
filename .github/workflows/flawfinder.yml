@@ -7,11 +7,11 @@ name: flawfinder
 
 on:
   push:
-#    branches: [ main, dev ]
+    branches: [ main, dev ]
     tags:
       - "v[0-9]+.[0-9]+.[0-9]+"
-#  pull_request:
-#    branches: [ main, dev ]
+  pull_request:
+    branches: [ main, dev ]
   workflow_dispatch:
 
 jobs:
