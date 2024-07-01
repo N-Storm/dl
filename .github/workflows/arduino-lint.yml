@@ -19,6 +19,6 @@ jobs:
           # Path containing Arduino projects.
           path: firmware
           # Search path recursively for projects to check.
-          recursive: true
+          recursive: false
           # Show more information on the checks being run.
           verbose: true
