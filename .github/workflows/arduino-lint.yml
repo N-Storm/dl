@@ -17,7 +17,7 @@ jobs:
       - uses: arduino/arduino-lint-action@v1.0.2
         with:
           # Path containing Arduino projects.
-          path: firmware/src
+          path: firmware/sketch/DigiLivolo
           # Search path recursively for projects to check.
           recursive: false
           # Show more information on the checks being run.
